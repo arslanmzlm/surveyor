@@ -14,5 +14,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/cities', [\App\Http\Controllers\Api\CityController::class, 'index']);
+    Route::get('/hospitals', [\App\Http\Controllers\Api\HospitalController::class, 'index']);
+    Route::post('/hospital/store', [\App\Http\Controllers\Api\HospitalController::class, 'store']);
+    Route::get('/hospital/{hospital}', [\App\Http\Controllers\Api\HospitalController::class, 'show']);
+    Route::post('/hospital/update/{hospital}', [\App\Http\Controllers\Api\HospitalController::class, 'update']);
+    Route::post('/hospital/delete/{hospital}', [\App\Http\Controllers\Api\HospitalController::class, 'destroy']);
+});
 
 Route::post('/login', [\App\Http\Controllers\Api\AuthController::class, 'authenticate']);
