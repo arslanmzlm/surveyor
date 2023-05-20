@@ -23,6 +23,13 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/hospital/{hospital}', [\App\Http\Controllers\Api\HospitalController::class, 'show']);
     Route::post('/hospital/update/{hospital}', [\App\Http\Controllers\Api\HospitalController::class, 'update']);
     Route::post('/hospital/delete/{hospital}', [\App\Http\Controllers\Api\HospitalController::class, 'destroy']);
+
+    // Clinic
+    Route::get('/clinics', [\App\Http\Controllers\Api\ClinicController::class, 'index']);
+    Route::post('/clinic/store', [\App\Http\Controllers\Api\ClinicController::class, 'store']);
+    Route::get('/clinic/{clinic}', [\App\Http\Controllers\Api\ClinicController::class, 'show']);
+    Route::post('/clinic/update/{clinic}', [\App\Http\Controllers\Api\ClinicController::class, 'update']);
+    Route::post('/clinic/delete/{clinic}', [\App\Http\Controllers\Api\ClinicController::class, 'destroy']);
 });
 
 Route::post('/login', [\App\Http\Controllers\Api\AuthController::class, 'authenticate']);
