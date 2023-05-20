@@ -23,6 +23,16 @@ class HospitalController extends Controller
     }
 
     /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function all(): \Illuminate\Http\Response
+    {
+        return response(Hospital::all());
+    }
+
+    /**
      * Store a newly created resource in storage.
      *
      * @param \App\Http\Requests\StoreHospitalRequest $request

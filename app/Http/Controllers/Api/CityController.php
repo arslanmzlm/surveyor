@@ -11,7 +11,7 @@ class CityController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): \Illuminate\Http\Response
+    public function all(): \Illuminate\Http\Response
     {
         return response(City::with('counties')->get());
     }

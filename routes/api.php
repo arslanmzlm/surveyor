@@ -15,10 +15,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/cities', [\App\Http\Controllers\Api\CityController::class, 'index']);
+    Route::get('/cities', [\App\Http\Controllers\Api\CityController::class, 'all']);
 
     // Hospital
     Route::get('/hospitals', [\App\Http\Controllers\Api\HospitalController::class, 'index']);
+    Route::get('/hospitals/all', [\App\Http\Controllers\Api\HospitalController::class, 'all']);
     Route::post('/hospital/store', [\App\Http\Controllers\Api\HospitalController::class, 'store']);
     Route::get('/hospital/{hospital}', [\App\Http\Controllers\Api\HospitalController::class, 'show']);
     Route::post('/hospital/update/{hospital}', [\App\Http\Controllers\Api\HospitalController::class, 'update']);
@@ -26,6 +27,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Clinic
     Route::get('/clinics', [\App\Http\Controllers\Api\ClinicController::class, 'index']);
+    Route::get('/clinics/all', [\App\Http\Controllers\Api\ClinicController::class, 'all']);
     Route::post('/clinic/store', [\App\Http\Controllers\Api\ClinicController::class, 'store']);
     Route::get('/clinic/{clinic}', [\App\Http\Controllers\Api\ClinicController::class, 'show']);
     Route::post('/clinic/update/{clinic}', [\App\Http\Controllers\Api\ClinicController::class, 'update']);

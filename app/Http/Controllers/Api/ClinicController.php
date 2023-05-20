@@ -23,6 +23,16 @@ class ClinicController extends Controller
     }
 
     /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function all(): \Illuminate\Http\Response
+    {
+        return response(Clinic::all());
+    }
+
+    /**
      * Store a newly created resource in storage.
      *
      * @param \App\Http\Requests\StoreClinicRequest $request
