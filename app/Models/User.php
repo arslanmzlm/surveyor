@@ -45,7 +45,7 @@ class User extends Authenticatable
      * @var array<string, string>
      */
     public array $filterable = [
-        'name' => 'search',
+        'first_name' => 'search',
         'surname' => 'search',
         'username' => 'search',
         'email' => 'search',
@@ -59,7 +59,7 @@ class User extends Authenticatable
      *
      * @var array<integer, string>
      */
-    public array $sortable = ['id', 'name', 'username'];
+    public array $sortable = ['id', 'first_name', 'username'];
 
     /**
      * Get the hospital that owns the user.

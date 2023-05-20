@@ -67,9 +67,9 @@ class Filter
     /**
      * Generate filters for query.
      *
-     * @return array
+     * @return \Illuminate\Support\Collection
      */
-    private function generateFilters(): array
+    private function generateFilters(): \Illuminate\Support\Collection
     {
         $filterable = $this->model->filterable;
         $queries = array_filter(request()->query->all());
@@ -91,7 +91,7 @@ class Filter
             }
         }
 
-        return $filters;
+        return collect($filters);
     }
 
     /**
@@ -101,17 +101,29 @@ class Filter
      */
     private function generateQuery(): \Illuminate\Database\Eloquent\Builder
     {
-        $query = $this->model->newQuery();
+        if (in_array('Illuminate\Database\Eloquent\SoftDeletes', class_uses($this->model))) {
+            $query = $this->model->withTrashed()->newQuery();
+        } else {
+            $query = $this->model->newQuery();
+        }
         $filters = $this->generateFilters();
+
+        $searches = $filters->where("type", "=", "search");
+
+        $query->where(function ($query) use ($searches) {
+            foreach ($searches as $filter) {
+                $column = $filter['column'];
+                $value = $filter['value'];
+                $query->orWhere($column, 'LIKE', "%{$value}%");
+            }
+        });
 
         foreach ($filters as $filter) {
             $column = $filter['column'];
             $type = $filter['type'];
             $value = $filter['value'];
 
-            if ($type === 'search') {
-                $query->where($column, 'LIKE', "%{$value}%");
-            } else if ($type === 'related') {
+            if ($type === 'related') {
                 $query->where($column, '=', $value);
             } else if ($type === 'equal') {
                 $query->where($column, '=', $value);
@@ -123,7 +135,7 @@ class Filter
         }
 
         if (!empty($this->with)) {
-            $query = $query->with($this->with);
+            $query->with($this->with);
         }
 
         return $query;
