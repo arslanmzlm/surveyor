@@ -32,6 +32,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/clinic/{clinic}', [\App\Http\Controllers\Api\ClinicController::class, 'show']);
     Route::post('/clinic/update/{clinic}', [\App\Http\Controllers\Api\ClinicController::class, 'update']);
     Route::post('/clinic/delete/{clinic}', [\App\Http\Controllers\Api\ClinicController::class, 'destroy']);
+
+    // User
+    Route::get('/users', [\App\Http\Controllers\Api\UserController::class, 'index']);
+    Route::get('/users/all', [\App\Http\Controllers\Api\UserController::class, 'all']);
+    Route::post('/user/store', [\App\Http\Controllers\Api\UserController::class, 'store']);
+    Route::get('/user/{user}', [\App\Http\Controllers\Api\UserController::class, 'show']);
+    Route::post('/user/update/{user}', [\App\Http\Controllers\Api\UserController::class, 'update']);
+    Route::post('/user/delete/{user}', [\App\Http\Controllers\Api\UserController::class, 'destroy']);
 });
 
 Route::post('/login', [\App\Http\Controllers\Api\AuthController::class, 'authenticate']);

@@ -174,6 +174,12 @@ return [
         'city_id' => 'İl',
         'county' => 'İlçe',
         'county_id' => 'İlçe',
+        'first_name' => 'Ad',
+        'surname' => 'Soyad',
+        'email' => 'E-Posta adresi',
+        'phone' => 'Telefon',
+        'hospital_id' => 'Hastane',
+        'clinic_id' => 'Klinik',
     ],
 
 ];
