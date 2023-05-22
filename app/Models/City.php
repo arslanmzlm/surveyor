@@ -10,7 +10,7 @@ class City extends Model
     use HasFactory;
 
     /**
-     * Get the county that owns the hospital.
+     * Get the counties belonged to the city.
      */
     public function counties(): \Illuminate\Database\Eloquent\Relations\HasMany
     {

@@ -62,7 +62,7 @@ class User extends Authenticatable
     public array $sortable = ['id', 'first_name', 'username'];
 
     /**
-     * Get the hospital that owns the user.
+     * Get the hospital the user is belonged to.
      */
     public function hospital(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
@@ -70,7 +70,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Get the clinic that owns the user.
+     * Get the clinic the user is belonged to.
      */
     public function clinic(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
