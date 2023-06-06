@@ -40,6 +40,19 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user/{user}', [\App\Http\Controllers\Api\UserController::class, 'show']);
     Route::post('/user/update/{user}', [\App\Http\Controllers\Api\UserController::class, 'update']);
     Route::post('/user/delete/{user}', [\App\Http\Controllers\Api\UserController::class, 'destroy']);
+
+    // Question
+    Route::get('/question-types', [\App\Http\Controllers\Api\QuestionTypeController::class, 'index']);
+    Route::post('/question-type/store', [\App\Http\Controllers\Api\QuestionTypeController::class, 'store']);
+    Route::post('/question-type/delete/{question_type}', [\App\Http\Controllers\Api\QuestionTypeController::class, 'destroy']);
+
+    // Template
+    Route::get('/templates', [\App\Http\Controllers\Api\TemplateController::class, 'all']);
+    Route::get('/templates/all', [\App\Http\Controllers\Api\TemplateController::class, 'all']);
+    Route::post('/template/store', [\App\Http\Controllers\Api\TemplateController::class, 'store']);
+    Route::get('/template/{template}', [\App\Http\Controllers\Api\TemplateController::class, 'show']);
+    Route::post('/template/update/{template}', [\App\Http\Controllers\Api\TemplateController::class, 'update']);
+    Route::post('/template/delete/{template}', [\App\Http\Controllers\Api\TemplateController::class, 'destroy']);
 });
 
 Route::post('/login', [\App\Http\Controllers\Api\AuthController::class, 'authenticate']);
