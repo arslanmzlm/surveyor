@@ -8,10 +8,24 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * App\Models\Hospital
  *
- * @property integer $id
+ * @property int $id
  * @property string $name
- * @property integer $city_id
- * @property integer $county_id
+ * @property int $city_id
+ * @property int $county_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\City $city
+ * @property-read \App\Models\County $county
+ * @method static \Illuminate\Database\Eloquent\Builder|Hospital newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Hospital newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Hospital query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Hospital whereCityId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Hospital whereCountyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Hospital whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Hospital whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Hospital whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Hospital whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class Hospital extends Model
 {
@@ -27,7 +41,7 @@ class Hospital extends Model
     /**
      * The attributes that are filterable.
      *
-     * @var array<string, string>
+     * @var array
      */
     public array $filterable = [
         'name' => 'search',
@@ -38,7 +52,7 @@ class Hospital extends Model
     /**
      * The attributes that are sortable.
      *
-     * @var array<integer, string>
+     * @var array
      */
     public array $sortable = ['id', 'name'];
 

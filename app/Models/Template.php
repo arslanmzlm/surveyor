@@ -5,6 +5,28 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Models\Template
+ *
+ * @property int $id
+ * @property int $user_id
+ * @property string $name
+ * @property string|null $description
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Question> $questions
+ * @property-read int|null $questions_count
+ * @method static \Illuminate\Database\Eloquent\Builder|Template newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Template newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Template query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Template whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Template whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Template whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Template whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Template whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Template whereUserId($value)
+ * @mixin \Eloquent
+ */
 class Template extends Model
 {
     use HasFactory;
@@ -26,7 +48,7 @@ class Template extends Model
     /**
      * The attributes that are filterable.
      *
-     * @var array<string, string>
+     * @var array
      */
     public array $filterable = [
         'name' => 'search',
@@ -35,7 +57,7 @@ class Template extends Model
     /**
      * The attributes that are sortable.
      *
-     * @var array<integer, string>
+     * @var array
      */
     public array $sortable = ['id', 'name'];
 

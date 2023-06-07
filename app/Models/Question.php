@@ -5,6 +5,39 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Models\Question
+ *
+ * @property int $id
+ * @property int $template_id
+ * @property int $question_type_id
+ * @property string $label
+ * @property string|null $description
+ * @property bool|null $required
+ * @property int $order
+ * @property array|null $values
+ * @property array|null $options
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read string|null $component
+ * @property-read \App\Models\QuestionType $questionType
+ * @property-read \App\Models\Template $template
+ * @method static \Illuminate\Database\Eloquent\Builder|Question newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Question newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Question query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Question whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Question whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Question whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Question whereLabel($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Question whereOptions($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Question whereOrder($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Question whereQuestionTypeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Question whereRequired($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Question whereTemplateId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Question whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Question whereValues($value)
+ * @mixin \Eloquent
+ */
 class Question extends Model
 {
     use HasFactory;
