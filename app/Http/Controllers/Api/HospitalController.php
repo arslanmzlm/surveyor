@@ -17,9 +17,9 @@ class HospitalController extends Controller
      */
     public function index(): \Illuminate\Http\Response
     {
-        $hospitals = new Filter(Hospital::class, ['city', 'county']);
+        $hospitals = new Filter(Hospital::class);
 
-        return response($hospitals->get());
+        return response($hospitals->with(['city', 'county'])->get());
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Helpers\Filter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreTemplateRequest;
 use App\Models\Template;
@@ -10,6 +11,18 @@ use Illuminate\Http\Response;
 
 class TemplateController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index(): \Illuminate\Http\Response
+    {
+        $templates = new Filter(Template::class);
+
+        return response($templates->userOnly()->get());
+    }
+
     /**
      * Display a listing of the resource.
      *

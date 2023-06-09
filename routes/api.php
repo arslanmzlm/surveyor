@@ -47,7 +47,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/question-type/delete/{question_type}', [\App\Http\Controllers\Api\QuestionTypeController::class, 'destroy']);
 
     // Template
-    Route::get('/templates', [\App\Http\Controllers\Api\TemplateController::class, 'all']);
+    Route::get('/templates', [\App\Http\Controllers\Api\TemplateController::class, 'index']);
     Route::get('/templates/all', [\App\Http\Controllers\Api\TemplateController::class, 'all']);
     Route::post('/template/store', [\App\Http\Controllers\Api\TemplateController::class, 'store']);
     Route::get('/template/{template}', [\App\Http\Controllers\Api\TemplateController::class, 'show']);

@@ -43,13 +43,48 @@ class Filter
      */
     private string $sort_type;
 
-    public function __construct(string $model, array $with = [], int $per_page = 10)
+    /**
+     * Is query user only filtering.
+     *
+     * @var bool
+     */
+    private bool $user_only = false;
+
+    /**
+     * @param string $model
+     * @param int $per_page
+     */
+    public function __construct(string $model, int $per_page = 10)
     {
         $this->model = new $model;
-        $this->with = $with;
         $this->per_page = (int)request()->query('limit', $per_page);
         $this->sort = Str::lower(request()->query('sort', 'id'));
         $this->sort_type = Str::lower(request()->query('sort_type', 'desc'));
+    }
+
+    /**
+     * Add relationship parameters to query.
+     *
+     * @param array $data
+     * @return $this
+     */
+    public function with(array $data = []): Filter
+    {
+        $this->with = $data;
+
+        return $this;
+    }
+
+    /**
+     * Active user filter for query.
+     *
+     * @return Filter
+     */
+    public function userOnly(): Filter
+    {
+        $this->user_only = true;
+
+        return $this;
     }
 
     /**
@@ -128,6 +163,10 @@ class Filter
             } else if ($type === 'equal') {
                 $query->where($column, '=', $value);
             }
+        }
+
+        if ($this->user_only && request()->user()) {
+            $query->where('user_id', request()->user()->id);
         }
 
         if (in_array($this->sort, $this->model->sortable) && in_array($this->sort_type, ['asc', 'desc'])) {
