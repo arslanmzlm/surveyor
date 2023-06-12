@@ -25,18 +25,4 @@ class UpdateUserRequest extends FormRequest
             "clinic_id" => ["nullable", "exists:clinics,id"],
         ];
     }
-
-    /**
-     * Get the validator instance for the request.
-     *
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
-    public function getValidatorInstance(): \Illuminate\Contracts\Validation\Validator
-    {
-        $this->merge([
-            'phone' => Mutators::cleanPhone($this->phone),
-        ]);
-
-        return parent::getValidatorInstance();
-    }
 }
