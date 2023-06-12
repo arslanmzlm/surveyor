@@ -177,9 +177,13 @@ return [
         'first_name' => 'Ad',
         'surname' => 'Soyad',
         'email' => 'E-Posta adresi',
-        'phone' => 'Telefon',
+        'phone' => 'Telefon numarası',
         'hospital_id' => 'Hastane',
         'clinic_id' => 'Klinik',
+        'patients' => 'Hastalar',
+        'group_id' => 'Grup',
+        'size' => 'Boyut',
+        'contact_phone' => 'İletişim numarası',
     ],
 
 ];

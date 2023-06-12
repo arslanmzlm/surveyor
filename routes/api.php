@@ -53,6 +53,21 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/template/{template}', [\App\Http\Controllers\Api\TemplateController::class, 'show']);
     Route::post('/template/update/{template}', [\App\Http\Controllers\Api\TemplateController::class, 'update']);
     Route::post('/template/delete/{template}', [\App\Http\Controllers\Api\TemplateController::class, 'destroy']);
+
+    // Workspace
+    Route::get('/workspaces', [\App\Http\Controllers\Api\WorkspaceController::class, 'index']);
+    Route::get('/workspaces/all', [\App\Http\Controllers\Api\WorkspaceController::class, 'all']);
+    Route::post('/workspace/store', [\App\Http\Controllers\Api\WorkspaceController::class, 'store']);
+    Route::get('/workspace/{workspace}', [\App\Http\Controllers\Api\WorkspaceController::class, 'show']);
+    Route::post('/workspace/update/{workspace}', [\App\Http\Controllers\Api\WorkspaceController::class, 'update']);
+    Route::post('/workspace/delete/{workspace}', [\App\Http\Controllers\Api\WorkspaceController::class, 'destroy']);
+
+    // Group
+    Route::get('/groups', [\App\Http\Controllers\Api\GroupController::class, 'index']);
+    Route::get('/groups/all', [\App\Http\Controllers\Api\GroupController::class, 'all']);
+    Route::get('/group/{group}', [\App\Http\Controllers\Api\GroupController::class, 'show']);
+    Route::post('/group/update/{group}', [\App\Http\Controllers\Api\GroupController::class, 'update']);
+    Route::post('/group/delete/{group}', [\App\Http\Controllers\Api\GroupController::class, 'destroy']);
 });
 
 Route::post('/login', [\App\Http\Controllers\Api\AuthController::class, 'authenticate']);
