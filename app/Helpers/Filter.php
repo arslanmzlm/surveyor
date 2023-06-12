@@ -51,6 +51,13 @@ class Filter
     private bool $user_only = false;
 
     /**
+     * Is query user only filtering.
+     *
+     * @var string|null
+     */
+    private ?string $user_related = null;
+
+    /**
      * @param string $model
      * @param int $per_page
      */
@@ -83,6 +90,19 @@ class Filter
     public function userOnly(): Filter
     {
         $this->user_only = true;
+
+        return $this;
+    }
+
+    /**
+     * Active user filter for query.
+     *
+     * @param string $relationship
+     * @return Filter
+     */
+    public function userRelated(string $relationship): Filter
+    {
+        $this->user_related = $relationship;
 
         return $this;
     }
@@ -167,6 +187,10 @@ class Filter
 
         if ($this->user_only && request()->user()) {
             $query->where('user_id', request()->user()->id);
+        }
+
+        if ($this->user_related && request()->user()) {
+            $query->whereRelation($this->user_related, 'user_id', '=', request()->user()->id);
         }
 
         if (in_array($this->sort, $this->model->sortable) && in_array($this->sort_type, ['asc', 'desc'])) {

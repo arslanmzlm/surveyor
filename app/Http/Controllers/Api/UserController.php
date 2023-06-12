@@ -19,9 +19,9 @@ class UserController extends Controller
      */
     public function index(): \Illuminate\Http\Response
     {
-        $users = new Filter(User::class, ['hospital', 'clinic']);
+        $users = new Filter(User::class);
 
-        return response($users->get());
+        return response($users->with(['hospital', 'clinic'])->get());
     }
 
     /**
