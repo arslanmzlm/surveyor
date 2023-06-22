@@ -30,7 +30,9 @@ class TemplateController extends Controller
      */
     public function all(): \Illuminate\Http\Response
     {
-        return response(Template::paginate());
+        $templates = new Filter(Template::class);
+
+        return response($templates->userOnly()->getData());
     }
 
     /**

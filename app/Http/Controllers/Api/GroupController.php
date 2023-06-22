@@ -4,7 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Helpers\Filter;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\UpdateGroupRequest;
+use App\Http\Requests\UpdateGroupPatientsRequest;
+use App\Http\Requests\UpdateGroupSurveysRequest;
 use App\Models\Group;
 use App\Repository\GroupRepository;
 
@@ -46,13 +47,27 @@ class GroupController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \App\Http\Requests\UpdateGroupRequest $request
+     * @param \App\Http\Requests\UpdateGroupPatientsRequest $request
      * @param \App\Models\Group $group
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateGroupRequest $request, Group $group): \Illuminate\Http\Response
+    public function updatePatients(UpdateGroupPatientsRequest $request, Group $group): \Illuminate\Http\Response
     {
-        GroupRepository::updateGroup($group);
+        GroupRepository::updatePatients($group);
+
+        return response(Group::find($group->id));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param \App\Http\Requests\UpdateGroupSurveysRequest $request
+     * @param \App\Models\Group $group
+     * @return \Illuminate\Http\Response
+     */
+    public function updateSurveys(UpdateGroupSurveysRequest $request, Group $group): \Illuminate\Http\Response
+    {
+        GroupRepository::updateSurveys($group);
 
         return response(Group::find($group->id));
     }
@@ -60,11 +75,11 @@ class GroupController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\Models\Group $groups
+     * @param \App\Models\Group $group
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Group $groups): \Illuminate\Http\Response
+    public function destroy(Group $group): \Illuminate\Http\Response
     {
-        return response(['success' => (bool)$groups->delete()]);
+        return response(['success' => (bool)$group->delete()]);
     }
 }

@@ -30,7 +30,7 @@ class WorkspaceController extends Controller
      */
     public function all(): \Illuminate\Http\Response
     {
-        return response(Workspace::all());
+        return response(Workspace::whereUserId(request()->user()->id)->get());
     }
 
     /**

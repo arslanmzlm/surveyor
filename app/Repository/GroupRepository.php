@@ -4,16 +4,17 @@ namespace App\Repository;
 
 use App\Models\Group;
 use App\Models\Patient;
+use App\Models\Survey;
 
 class GroupRepository
 {
     /**
-     * Update group data.
+     * Update group data with patients.
      *
      * @param \App\Models\Group $group
      * @return \App\Models\Group
      */
-    public static function updateGroup(Group $group): \App\Models\Group
+    public static function updatePatients(Group $group): \App\Models\Group
     {
         $group->name = request()->input('name');
         $group->size = request()->input('size');
@@ -64,6 +65,66 @@ class GroupRepository
                 $patient->phone = $item['phone'];
                 $patient->contact_phone = !empty($item['contact_phone']) ? $item['contact_phone'] : null;
                 $patient->save();
+            }
+        }
+    }
+
+    /**
+     * Update group data with surveys.
+     *
+     * @param \App\Models\Group $group
+     * @return \App\Models\Group
+     */
+    public static function updateSurveys(Group $group): \App\Models\Group
+    {
+        $group->name = request()->input('name');
+        $group->save();
+
+        self::deleteSurveys($group);
+
+        self::storeSurveys($group);
+
+        return $group;
+    }
+
+    /**
+     * Delete surveys that are no longer used.
+     *
+     * @param \App\Models\Group $group
+     * @return mixed
+     */
+    public static function deleteSurveys(Group $group)
+    {
+        $surveys = collect(request()->input('surveys'));
+
+        if ($surveys) {
+            return $group->surveys()->whereNotIn('id', $surveys->pluck('id'))->delete();
+        }
+
+        return true;
+    }
+
+    /**
+     * Store survey data.
+     *
+     * @param \App\Models\Group $group
+     * @return void
+     */
+    public static function storeSurveys(Group $group): void
+    {
+        $surveys = request()->input('surveys');
+
+        foreach ($surveys as $item) {
+            if (!empty($item['template_id']) && !empty($item['survey_at'])) {
+                /**
+                 * @var Survey $survey
+                 */
+                $survey = Survey::findOrNew($item['id'] ?? null);
+                $survey->group_id = $group->id;
+                $survey->name = !empty($item['name']) ? $item['name'] : null;
+                $survey->template_id = $item['template_id'];
+                $survey->survey_at = $item['survey_at'];
+                $survey->save();
             }
         }
     }

@@ -120,6 +120,18 @@ class Filter
     }
 
     /**
+     * Get only items.
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getData(): \Illuminate\Database\Eloquent\Collection
+    {
+        $query = $this->generateQuery();
+
+        return $query->get();
+    }
+
+    /**
      * Generate filters for query.
      *
      * @return \Illuminate\Support\Collection

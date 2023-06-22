@@ -18,6 +18,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property-read string $workspace_name
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Patient> $patients
  * @property-read int|null $patients_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Survey> $surveys
+ * @property-read int|null $surveys_count
  * @property-read \App\Models\Workspace $workspace
  * @method static \Illuminate\Database\Eloquent\Builder|Group newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Group newQuery()
@@ -46,7 +48,7 @@ class Group extends Model
      *
      * @var array
      */
-    protected $with = ['patients'];
+    protected $with = ['patients', 'surveys'];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -92,6 +94,14 @@ class Group extends Model
     public function patients(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Patient::class);
+    }
+
+    /**
+     * Get all the surveys for the group.
+     */
+    public function surveys(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Survey::class);
     }
 
     /**

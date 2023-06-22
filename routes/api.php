@@ -66,7 +66,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/groups', [\App\Http\Controllers\Api\GroupController::class, 'index']);
     Route::get('/groups/all', [\App\Http\Controllers\Api\GroupController::class, 'all']);
     Route::get('/group/{group}', [\App\Http\Controllers\Api\GroupController::class, 'show']);
-    Route::post('/group/update/{group}', [\App\Http\Controllers\Api\GroupController::class, 'update']);
+    Route::post('/group/update/patients/{group}', [\App\Http\Controllers\Api\GroupController::class, 'updatePatients']);
+    Route::post('/group/update/surveys/{group}', [\App\Http\Controllers\Api\GroupController::class, 'updateSurveys']);
     Route::post('/group/delete/{group}', [\App\Http\Controllers\Api\GroupController::class, 'destroy']);
 });
 
