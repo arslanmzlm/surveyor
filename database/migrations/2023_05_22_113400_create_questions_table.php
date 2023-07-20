@@ -24,14 +24,14 @@ class CreateQuestionsTable extends Migration
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
             $table->string('label');
-            $table->string('description')
+            $table->text('description')
                 ->nullable()
                 ->default(null);
             $table->boolean('required')
                 ->nullable()
                 ->default(false);
             $table->unsignedSmallInteger('order');
-            $table->tinyText('value')
+            $table->text('value')
                 ->nullable()
                 ->default(null);
             $table->json('values')

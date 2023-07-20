@@ -29,7 +29,7 @@ class CreateQuestionTypesTable extends Migration
                 ->cascadeOnUpdate();
             $table->string('component');
             $table->string('label');
-            $table->string('description')
+            $table->text('description')
                 ->nullable()
                 ->default(null);
             $table->boolean('required')
@@ -38,7 +38,7 @@ class CreateQuestionTypesTable extends Migration
             $table->unsignedSmallInteger('order')
                 ->nullable()
                 ->default(null);
-            $table->tinyText('value')
+            $table->text('value')
                 ->nullable()
                 ->default(null);
             $table->json('values')

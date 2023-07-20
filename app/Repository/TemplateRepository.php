@@ -24,9 +24,7 @@ class TemplateRepository
 
         self::storeQuestions($template);
 
-        $template->refresh();
-
-        return $template;
+        return $template->fresh();
     }
 
     /**
@@ -45,9 +43,7 @@ class TemplateRepository
 
         self::storeQuestions($template);
 
-        $template->refresh();
-
-        return $template;
+        return $template->fresh();
     }
 
     /**
@@ -93,21 +89,21 @@ class TemplateRepository
         }
     }
 
-        /**
+    /**
      * Delete questions that are no longer used.
      *
      * @param \App\Models\Template $template
-     * @return bool|mixed
+     * @return void
      */
-    private static function deleteQuestions(Template $template)
+    private static function deleteQuestions(Template $template): void
     {
         $groups = collect(request()->input('questions'));
 
         if ($groups) {
-            return $template->questions()->whereNotIn('id', $groups->pluck('id'))->delete();
+            $template->questions()->whereNotIn('id', $groups->pluck('id'))->delete();
         }
 
-        return true;
+        return;
     }
 
     /**

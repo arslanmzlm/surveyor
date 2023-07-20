@@ -14,13 +14,13 @@ class UpdateTemplateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string'],
+            'name' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string'],
             'questions' => ['required', 'array'],
             'questions.*.id' => ['nullable', 'exists:questions,id'],
             'questions.*.component' => ['required', 'exists:question_types,component'],
             'questions.*.question_type_id' => ['required', 'exists:question_types,id'],
-            'questions.*.label' => ['required', 'string'],
+            'questions.*.label' => ['required', 'string', 'max:255'],
             'questions.*.description' => ['required', 'string'],
             'questions.*.required' => ['nullable', 'boolean'],
             'questions.*.order' => ['required', 'numeric'],
