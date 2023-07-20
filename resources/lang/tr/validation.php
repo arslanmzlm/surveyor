@@ -194,6 +194,8 @@ return [
         'surveys.*.template_id' => 'Anket şablonu',
         'surveys.*.survey_at' => 'Anket tarihi',
         'surveys.*.survey_at.today' => 'Bugün',
+        'abilities' => 'Yetkinlikler',
+        'abilities.*' => 'Yetkinlik',
     ],
 
 ];

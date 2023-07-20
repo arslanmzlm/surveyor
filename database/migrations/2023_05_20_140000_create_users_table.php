@@ -22,6 +22,12 @@ class CreateUsersTable extends Migration
             $table->string('phone');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->foreignId('role_id')
+                ->nullable()
+                ->default(null)
+                ->constrained()
+                ->nullOnDelete()
+                ->cascadeOnUpdate();
             $table->foreignId('hospital_id')
                 ->nullable()
                 ->default(null)

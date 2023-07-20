@@ -20,6 +20,7 @@ use Laravel\Sanctum\HasApiTokens;
  * @property string $phone
  * @property \Illuminate\Support\Carbon|null $email_verified_at
  * @property string $password
+ * @property int|null $role_id
  * @property int|null $hospital_id
  * @property int|null $clinic_id
  * @property string|null $remember_token
@@ -30,6 +31,7 @@ use Laravel\Sanctum\HasApiTokens;
  * @property-read \App\Models\Hospital|null $hospital
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
+ * @property-read \App\Models\Role|null $role
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Laravel\Sanctum\PersonalAccessToken> $tokens
  * @property-read int|null $tokens_count
  * @method static \Database\Factories\UserFactory factory(...$parameters)
@@ -48,6 +50,7 @@ use Laravel\Sanctum\HasApiTokens;
  * @method static \Illuminate\Database\Eloquent\Builder|User wherePassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User wherePhone($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereRememberToken($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereRoleId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereSurname($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUsername($value)
@@ -65,6 +68,13 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $guarded = [];
+
+    /**
+     * The relationships that should always be loaded.
+     *
+     * @var array
+     */
+    protected $with = ['role'];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -121,5 +131,13 @@ class User extends Authenticatable
     public function clinic(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Clinic::class);
+    }
+
+    /**
+     * Get the role the user is belonged to.
+     */
+    public function role(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Role::class);
     }
 }
