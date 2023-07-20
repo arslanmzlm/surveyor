@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreQuestionTypeRequest;
+use App\Http\Requests\UpdateQuestionTypeRequest;
 use App\Models\QuestionType;
 use App\Repository\QuestionRepository;
 
@@ -27,16 +28,21 @@ class QuestionTypeController extends Controller
      */
     public function store(StoreQuestionTypeRequest $request): \Illuminate\Http\Response
     {
-        $question_type = new QuestionType();
-        $question_type->user_id = $request->user()->id;
-        $question_type->main_type_id = $request->input('main_type_id') ?? $request->input('question_type_id');
-        $question_type->component = $request->input('component');
-        $question_type->label = $request->input('component_name');
-        $question_type->description = $request->input('component_description');
-        $question_type->required = $request->input('required', false);
-        $question_type->values = !empty($request->input('values')) ? $request->input('values') : null;
-        $question_type->options = !empty($request->input('options')) ? $request->input('options') : null;
-        $question_type->save();
+        $question_type = QuestionRepository::storeType();
+
+        return response($question_type);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param \App\Http\Requests\UpdateQuestionTypeRequest $request
+     * @param \App\Models\QuestionType $question_type
+     * @return \Illuminate\Http\Response
+     */
+    public function update(UpdateQuestionTypeRequest $request, QuestionType $question_type): \Illuminate\Http\Response
+    {
+        $question_type = QuestionRepository::updateType($question_type);
 
         return response($question_type);
     }
@@ -49,6 +55,6 @@ class QuestionTypeController extends Controller
      */
     public function destroy(QuestionType $question_type): \Illuminate\Http\Response
     {
-        return response(['success' => (bool)$question_type->delete()]);
+        return response(['success' => QuestionRepository::deleteType($question_type)]);
     }
 }

@@ -10,11 +10,13 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @property int $id
  * @property int|null $user_id
- * @property int|null $main_type_id
+ * @property int|null $main_question_type_id
  * @property string $component
  * @property string $label
  * @property string|null $description
- * @property bool $required
+ * @property bool|null $required
+ * @property int|null $order
+ * @property string|null $value
  * @property array|null $values
  * @property array|null $options
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -27,11 +29,13 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|QuestionType whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|QuestionType whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|QuestionType whereLabel($value)
- * @method static \Illuminate\Database\Eloquent\Builder|QuestionType whereMainTypeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|QuestionType whereMainQuestionTypeId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|QuestionType whereOptions($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|QuestionType whereOrder($value)
  * @method static \Illuminate\Database\Eloquent\Builder|QuestionType whereRequired($value)
  * @method static \Illuminate\Database\Eloquent\Builder|QuestionType whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|QuestionType whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|QuestionType whereValue($value)
  * @method static \Illuminate\Database\Eloquent\Builder|QuestionType whereValues($value)
  * @mixin \Eloquent
  */

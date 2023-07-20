@@ -21,7 +21,7 @@ class CreateQuestionTypesTable extends Migration
                 ->constrained()
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
-            $table->foreignId('main_type_id')
+            $table->foreignId('main_question_type_id')
                 ->nullable()
                 ->default(null)
                 ->constrained('question_types')
@@ -30,6 +30,15 @@ class CreateQuestionTypesTable extends Migration
             $table->string('component');
             $table->string('label');
             $table->string('description')
+                ->nullable()
+                ->default(null);
+            $table->boolean('required')
+                ->nullable()
+                ->default(false);
+            $table->unsignedSmallInteger('order')
+                ->nullable()
+                ->default(null);
+            $table->tinyText('value')
                 ->nullable()
                 ->default(null);
             $table->json('values')

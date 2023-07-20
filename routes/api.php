@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -44,6 +43,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // Question
     Route::get('/question-types', [\App\Http\Controllers\Api\QuestionTypeController::class, 'index']);
     Route::post('/question-type/store', [\App\Http\Controllers\Api\QuestionTypeController::class, 'store']);
+    Route::post('/question-type/update/{question_type}', [\App\Http\Controllers\Api\QuestionTypeController::class, 'update']);
     Route::post('/question-type/delete/{question_type}', [\App\Http\Controllers\Api\QuestionTypeController::class, 'destroy']);
 
     // Template

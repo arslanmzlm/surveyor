@@ -15,11 +15,13 @@ use Illuminate\Database\Eloquent\Model;
  * @property string|null $description
  * @property bool|null $required
  * @property int $order
+ * @property string|null $value
  * @property array|null $values
  * @property array|null $options
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read string|null $component
+ * @property-read string $component
+ * @property-read int|null $main_question_type_id
  * @property-read \App\Models\QuestionType $questionType
  * @property-read \App\Models\Template $template
  * @method static \Illuminate\Database\Eloquent\Builder|Question newModelQuery()
@@ -35,6 +37,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Question whereRequired($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Question whereTemplateId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Question whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Question whereValue($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Question whereValues($value)
  * @mixin \Eloquent
  */
@@ -90,10 +93,20 @@ class Question extends Model
     /**
      * Get component for question.
      *
-     * @return string|null
+     * @return string
      */
-    public function getComponentAttribute(): ?string
+    public function getComponentAttribute(): string
     {
         return $this->questionType->component;
+    }
+
+    /**
+     * Get main question type id for question.
+     *
+     * @return int|null
+     */
+    public function getMainQuestionTypeIdAttribute(): ?int
+    {
+        return $this->questionType->main_question_type_id;
     }
 }

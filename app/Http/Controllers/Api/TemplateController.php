@@ -5,9 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\Helpers\Filter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreTemplateRequest;
+use App\Http\Requests\UpdateTemplateRequest;
 use App\Models\Template;
 use App\Repository\TemplateRepository;
-use Illuminate\Http\Response;
 
 class TemplateController extends Controller
 {
@@ -45,7 +45,7 @@ class TemplateController extends Controller
     {
         $template = TemplateRepository::storeTemplate();
 
-        return response(Template::find($template->id));
+        return response($template);
     }
 
     /**
@@ -62,15 +62,15 @@ class TemplateController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \App\Http\Requests\StoreTemplateRequest $request
+     * @param \App\Http\Requests\UpdateTemplateRequest $request
      * @param \App\Models\Template $template
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreTemplateRequest $request, Template $template): \Illuminate\Http\Response
+    public function update(UpdateTemplateRequest $request, Template $template): \Illuminate\Http\Response
     {
         $template = TemplateRepository::updateTemplate($template);
 
-        return response(Template::find($template->id));
+        return response($template);
     }
 
     /**

@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreQuestionTypeRequest extends FormRequest
+class UpdateQuestionTypeRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -14,9 +14,6 @@ class StoreQuestionTypeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'question_type_id' => ['required', 'exists:question_types,id'],
-            'main_question_type_id' => ['nullable', 'exists:question_types,id'],
-            'component' => ['required', 'string'],
             'component_name' => ['required', 'string'],
             'component_description' => ['nullable', 'string'],
             'required' => ['nullable', 'boolean'],

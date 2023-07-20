@@ -31,6 +31,9 @@ class CreateQuestionsTable extends Migration
                 ->nullable()
                 ->default(false);
             $table->unsignedSmallInteger('order');
+            $table->tinyText('value')
+                ->nullable()
+                ->default(null);
             $table->json('values')
                 ->nullable()
                 ->default(null);
