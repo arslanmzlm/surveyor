@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Helpers\Mutators;
 use App\Models\Question;
 use App\Models\Template;
 use Illuminate\Http\UploadedFile;
@@ -57,17 +58,7 @@ class TemplateRepository
         $questions = request()->input('questions');
 
         foreach ($questions as $item) {
-            if (!array_key_exists('value', $item)) {
-                $item['value'] = null;
-            }
-
-            if (!array_key_exists('values', $item)) {
-                $item['values'] = null;
-            }
-
-            if (!array_key_exists('options', $item)) {
-                $item['options'] = null;
-            }
+            $item = Mutators::questionRequest($item);
 
             /**
              * @var Question $question
@@ -79,9 +70,9 @@ class TemplateRepository
             $question->description = $item['description'];
             $question->required = $item['required'];
             $question->order = $item['order'];
-            $question->value = is_string($item['value']) ? $item['value'] : null;
-            $question->values = is_array($item['values']) && !empty(array_filter($item['values'])) ? array_filter($item['values']) : null;
-            $question->options = is_array($item['options']) && !empty(array_filter($item['options'])) ? array_filter($item['options']) : null;
+            $question->value = $item['value'];
+            $question->values = $item['values'];
+            $question->options = $item['options'];
 
             self::storeFiles($question, $item);
 
