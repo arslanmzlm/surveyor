@@ -20,7 +20,7 @@ class TemplateController extends Controller
     {
         $templates = new Filter(Template::class);
 
-        return response($templates->userOnly()->get());
+        return response($templates->get());
     }
 
     /**

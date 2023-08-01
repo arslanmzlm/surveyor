@@ -23,7 +23,7 @@ class CreateQuestionsTable extends Migration
                 ->constrained()
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
-            $table->string('label');
+            $table->string('label', 1023);
             $table->text('description')
                 ->nullable()
                 ->default(null);
