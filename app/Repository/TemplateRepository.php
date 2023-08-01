@@ -109,28 +109,15 @@ class TemplateRepository
         if ($item['value'] instanceof UploadedFile) {
             $file = $item['value'];
             $fileName = Str::slug($question->template->name) . '-' . rand(10000, 99999) . '.' . $file->extension();
-            $file->storePubliclyAs('/images/templates/value', $fileName);
+            $file->storeAs('/public/images/templates/value', $fileName);
             $question->value = $fileName;
-        }
-
-        if (is_array($item['values']) && !empty(array_filter($item['values']))) {
-            foreach ($item['values'] as $key => $value) {
-                if ($value['label'] instanceof UploadedFile) {
-                    $file = $value['value'];
-                    $fileName = Str::slug($question->template->name) . '-value-' . $key . '-' . rand(10000, 99999) . '.' . $file->extension();
-                    $file->storePubliclyAs('/images/templates/values', $fileName);
-                    $item['values'][$key]['value'] = $fileName;
-                }
-            }
-
-            $question->values = $item['values'];
         }
 
         if (is_array($item['options']) && !empty(array_filter($item['options']))) {
             foreach ($item['options'] as $key => $option) {
                 if ($option instanceof UploadedFile) {
                     $fileName = Str::slug($question->template->name) . '-option-' . $key . '-' . rand(10000, 99999) . '.' . $option->extension();
-                    $option->storePubliclyAs('/images/templates/options', $fileName);
+                    $option->storeAs('/public/images/templates/options', $fileName);
                     $item['options'][$key] = $fileName;
                 }
             }

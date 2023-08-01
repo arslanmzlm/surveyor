@@ -28,7 +28,7 @@ class CreateQuestionTypesTable extends Migration
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
             $table->string('component');
-            $table->string('label');
+            $table->string('label', 1023);
             $table->text('description')
                 ->nullable()
                 ->default(null);
