@@ -71,6 +71,7 @@ class TemplateRepository
             $question->required = $item['required'];
             $question->order = $item['order'];
             $question->value = $item['value'];
+            $question->score = $item['score'];
             $question->values = $item['values'];
             $question->options = $item['options'];
 

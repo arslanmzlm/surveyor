@@ -45,6 +45,7 @@ class Mutators
             $question['options'] = self::questionOptions($question['options']);
         }
 
+        $question['score'] = array_key_exists('score', $question) && is_numeric($question['score']) ? (int)$question['score'] : null;
         $question['values'] = is_array($question['values']) && !empty(array_filter($question['values'])) ? array_filter($question['values']) : null;
         $question['options'] = is_array($question['options']) && !empty(array_filter($question['options'])) ? array_filter($question['options']) : null;
 
@@ -52,7 +53,7 @@ class Mutators
     }
 
     /**
-     * Mutate the values ​​of the question.
+     * Mutate the values of the question.
      *
      * @param array $values
      * @return array
@@ -77,7 +78,7 @@ class Mutators
     }
 
     /**
-     * Mutate the opitons ​​of the question.
+     * Mutate the options of the question.
      *
      * @param array $options
      * @return array
