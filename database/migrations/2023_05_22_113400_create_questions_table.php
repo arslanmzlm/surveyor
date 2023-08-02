@@ -34,6 +34,9 @@ class CreateQuestionsTable extends Migration
             $table->text('value')
                 ->nullable()
                 ->default(null);
+            $table->smallInteger('score')
+                ->nullable()
+                ->default(null);
             $table->json('values')
                 ->nullable()
                 ->default(null);

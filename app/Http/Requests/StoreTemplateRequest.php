@@ -24,6 +24,7 @@ class StoreTemplateRequest extends FormRequest
             'questions.*.required' => ['nullable', 'boolean'],
             'questions.*.order' => ['required', 'numeric'],
             'questions.*.value' => ['nullable'],
+            'questions.*.score' => ['nullable', 'numeric'],
             'questions.*.values' => ['nullable', 'array'],
             'questions.*.values.*.label' => ['required', 'string'],
             'questions.*.values.*.score' => ['required', 'numeric'],
