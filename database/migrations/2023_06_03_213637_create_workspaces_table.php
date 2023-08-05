@@ -20,6 +20,9 @@ class CreateWorkspacesTable extends Migration
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
             $table->string('name');
+            $table->string('logo')
+                ->nullable()
+                ->default(null);
             $table->timestamps();
         });
     }

@@ -15,9 +15,11 @@ class StoreWorkspaceRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string'],
+            'logo' => ['nullable'],
             'groups' => ['required', 'array'],
             'groups.*.name' => ['required', 'string'],
             'groups.*.size' => ['required', 'numeric', 'gte:0'],
+            'groups.*.logo' => ['nullable'],
         ];
     }
 }
