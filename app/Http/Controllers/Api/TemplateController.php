@@ -43,7 +43,7 @@ class TemplateController extends Controller
      */
     public function store(StoreTemplateRequest $request): \Illuminate\Http\Response
     {
-        $template = TemplateRepository::storeTemplate();
+        $template = TemplateRepository::store();
 
         return response($template);
     }
@@ -68,7 +68,7 @@ class TemplateController extends Controller
      */
     public function update(UpdateTemplateRequest $request, Template $template): \Illuminate\Http\Response
     {
-        $template = TemplateRepository::updateTemplate($template);
+        $template = TemplateRepository::update($template);
 
         return response($template);
     }

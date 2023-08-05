@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property bool|null $required
  * @property int $order
  * @property string|null $value
+ * @property int|null $score
  * @property array|null $values
  * @property array|null $options
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -35,6 +36,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Question whereOrder($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Question whereQuestionTypeId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Question whereRequired($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Question whereScore($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Question whereTemplateId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Question whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Question whereValue($value)
