@@ -117,6 +117,10 @@ class QuestionRepository
      */
     private static function mutateRequest(array $question): array
     {
+        if (!isset($question['description'])) {
+            $question['description'] = null;
+        }
+
         if (!isset($question['value'])) {
             $question['value'] = null;
         }
