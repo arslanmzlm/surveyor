@@ -21,6 +21,9 @@ class CreateGroupsTable extends Migration
                 ->cascadeOnUpdate();
             $table->string('name');
             $table->unsignedInteger('size');
+            $table->string('logo')
+                ->nullable()
+                ->default(null);
             $table->timestamps();
         });
     }

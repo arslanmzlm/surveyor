@@ -41,9 +41,9 @@ class WorkspaceController extends Controller
      */
     public function store(StoreWorkspaceRequest $request): \Illuminate\Http\Response
     {
-        $workspace = WorkspaceRepository::storeWorkspace();
+        $workspace = WorkspaceRepository::store();
 
-        return response(Workspace::find($workspace->id));
+        return response($workspace);
     }
 
     /**
@@ -66,9 +66,9 @@ class WorkspaceController extends Controller
      */
     public function update(UpdateWorkspaceRequest $request, Workspace $workspace): \Illuminate\Http\Response
     {
-        WorkspaceRepository::updateWorkspace($workspace);
+        WorkspaceRepository::update($workspace);
 
-        return response(Workspace::find($workspace->id));
+        return response($workspace);
     }
 
     /**

@@ -2,11 +2,8 @@
 
 namespace App\Repository;
 
-use App\Helpers\Mutators;
 use App\Models\Question;
 use App\Models\Template;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Str;
 
 class TemplateRepository
 {
@@ -15,7 +12,7 @@ class TemplateRepository
      *
      * @return \App\Models\Template
      */
-    public static function storeTemplate(): \App\Models\Template
+    public static function store(): \App\Models\Template
     {
         $template = new Template();
         $template->user_id = request()->user()->id;
@@ -34,15 +31,14 @@ class TemplateRepository
      * @param \App\Models\Template $template
      * @return \App\Models\Template
      */
-    public static function updateTemplate(Template $template): \App\Models\Template
+    public static function update(Template $template): \App\Models\Template
     {
         $template->name = request()->input('name');
         $template->description = request()->input('description');
         $template->save();
 
         self::deleteQuestions($template);
-
-        self::storeQuestions($template);
+        self::updateQuestions($template);
 
         return $template->fresh();
     }
@@ -58,26 +54,28 @@ class TemplateRepository
         $questions = request()->input('questions');
 
         foreach ($questions as $item) {
-            $item = Mutators::questionRequest($item);
+            $item['template_id'] = $template->id;
+            QuestionRepository::store($item);
+        }
+    }
 
-            /**
-             * @var Question $question
-             */
-            $question = Question::findOrNew($item['id'] ?? null);
-            $question->template_id = $template->id;
-            $question->question_type_id = $item['main_question_type_id'] ?? $item['question_type_id'];
-            $question->label = $item['label'];
-            $question->description = $item['description'];
-            $question->required = $item['required'];
-            $question->order = $item['order'];
-            $question->value = $item['value'];
-            $question->score = $item['score'];
-            $question->values = $item['values'];
-            $question->options = $item['options'];
+    /**
+     * Store question data.
+     *
+     * @param \App\Models\Template $template
+     * @return void
+     */
+    private static function updateQuestions(Template $template): void
+    {
+        $questions = request()->input('questions');
 
-            self::storeFiles($question, $item);
-
-            $question->save();
+        foreach ($questions as $item) {
+            $item['template_id'] = $template->id;
+            if (isset($item['id'])) {
+                QuestionRepository::update(Question::find($item['id']));
+            } else {
+                QuestionRepository::store($item);
+            }
         }
     }
 
@@ -89,41 +87,10 @@ class TemplateRepository
      */
     private static function deleteQuestions(Template $template): void
     {
-        $groups = collect(request()->input('questions'));
+        $questions = collect(request()->input('questions'));
 
-        if ($groups) {
-            $template->questions()->whereNotIn('id', $groups->pluck('id'))->delete();
-        }
-
-        return;
-    }
-
-    /**
-     * Store files.
-     *
-     * @param Question $question
-     * @param array $item
-     * @return void
-     */
-    private static function storeFiles(Question $question, array $item): void
-    {
-        if ($item['value'] instanceof UploadedFile) {
-            $file = $item['value'];
-            $fileName = Str::slug($question->template->name) . '-' . rand(10000, 99999) . '.' . $file->extension();
-            $file->storeAs('/public/images/templates/value', $fileName);
-            $question->value = $fileName;
-        }
-
-        if (is_array($item['options']) && !empty(array_filter($item['options']))) {
-            foreach ($item['options'] as $key => $option) {
-                if ($option instanceof UploadedFile) {
-                    $fileName = Str::slug($question->template->name) . '-option-' . $key . '-' . rand(10000, 99999) . '.' . $option->extension();
-                    $option->storeAs('/public/images/templates/options', $fileName);
-                    $item['options'][$key] = $fileName;
-                }
-            }
-
-            $question->options = $item['options'];
+        if ($questions) {
+            $template->questions()->whereNotIn('id', $questions->pluck('id'))->delete();
         }
     }
 }

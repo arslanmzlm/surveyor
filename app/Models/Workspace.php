@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $id
  * @property int $user_id
  * @property string $name
+ * @property string|null $logo
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Group> $groups
@@ -20,6 +21,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Workspace query()
  * @method static \Illuminate\Database\Eloquent\Builder|Workspace whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Workspace whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Workspace whereLogo($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Workspace whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Workspace whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Workspace whereUserId($value)

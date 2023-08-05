@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreQuestionTypeRequest;
 use App\Http\Requests\UpdateQuestionTypeRequest;
 use App\Models\QuestionType;
-use App\Repository\QuestionRepository;
+use App\Repository\QuestionTypeRepository;
 
 class QuestionTypeController extends Controller
 {
@@ -17,7 +17,7 @@ class QuestionTypeController extends Controller
      */
     public function index(): \Illuminate\Http\Response
     {
-        return response(QuestionRepository::getTypes());
+        return response(QuestionTypeRepository::getForTemplate());
     }
 
     /**
@@ -28,7 +28,7 @@ class QuestionTypeController extends Controller
      */
     public function store(StoreQuestionTypeRequest $request): \Illuminate\Http\Response
     {
-        $question_type = QuestionRepository::storeType();
+        $question_type = QuestionTypeRepository::store();
 
         return response($question_type);
     }
@@ -42,7 +42,7 @@ class QuestionTypeController extends Controller
      */
     public function update(UpdateQuestionTypeRequest $request, QuestionType $question_type): \Illuminate\Http\Response
     {
-        $question_type = QuestionRepository::updateType($question_type);
+        $question_type = QuestionTypeRepository::update($question_type);
 
         return response($question_type);
     }
@@ -55,6 +55,6 @@ class QuestionTypeController extends Controller
      */
     public function destroy(QuestionType $question_type): \Illuminate\Http\Response
     {
-        return response(['success' => QuestionRepository::deleteType($question_type)]);
+        return response(['success' => QuestionTypeRepository::delete($question_type)]);
     }
 }

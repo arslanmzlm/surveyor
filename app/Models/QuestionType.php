@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int|null $user_id
  * @property int|null $main_question_type_id
  * @property string $component
+ * @property string|null $type
  * @property string $label
  * @property string|null $description
  * @property bool|null $required
@@ -33,6 +34,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|QuestionType whereOptions($value)
  * @method static \Illuminate\Database\Eloquent\Builder|QuestionType whereOrder($value)
  * @method static \Illuminate\Database\Eloquent\Builder|QuestionType whereRequired($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|QuestionType whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|QuestionType whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|QuestionType whereUserId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|QuestionType whereValue($value)
@@ -42,6 +44,26 @@ use Illuminate\Database\Eloquent\Model;
 class QuestionType extends Model
 {
     use HasFactory;
+
+    const COMPONENT_TYPE_INPUT = "input";
+    const COMPONENT_TYPE_OUTPUT = "output";
+
+    const COMPONENT_TEXT = "InputText";
+    const COMPONENT_NUMBER = "InputNumber";
+    const COMPONENT_RADIO_GROUP = "InputRadioGroup";
+    const COMPONENT_CHECKBOX_GROUP = "InputCheckboxGroup";
+    const COMPONENT_DATE = "InputDate";
+    const COMPONENT_MULTIPLE_RADIO_GROUP = "InputMultipleRadioGroup";
+    const COMPONENT_RANGE = "InputRange";
+
+    const COMPONENT_DESCRIPTION = "OutputDescription";
+    const COMPONENT_IMAGE = "OutputImage";
+
+    const COMPONENTS_HAS_VALUES = [
+        QuestionType::COMPONENT_RADIO_GROUP,
+        QuestionType::COMPONENT_CHECKBOX_GROUP,
+        QuestionType::COMPONENT_MULTIPLE_RADIO_GROUP,
+    ];
 
     /**
      * The attributes that aren't mass assignable.

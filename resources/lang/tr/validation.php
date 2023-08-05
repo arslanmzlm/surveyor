@@ -196,6 +196,8 @@ return [
         'surveys.*.survey_at.today' => 'Bugün',
         'abilities' => 'Yetkinlikler',
         'abilities.*' => 'Yetkinlik',
+        'logo' => 'Logo',
+        'groups.*.logo' => 'Logo',
     ],
 
 ];
