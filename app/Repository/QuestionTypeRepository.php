@@ -7,14 +7,14 @@ use App\Models\QuestionType;
 use Illuminate\Database\Eloquent\Collection;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
-class QuestionRepository
+class QuestionTypeRepository
 {
     /**
      * Get question types.
      *
      * @return Collection|QuestionType[]
      */
-    public static function getTypes(): ?\Illuminate\Database\Eloquent\Collection
+    public static function getForTemplate(): ?\Illuminate\Database\Eloquent\Collection
     {
         return QuestionType::query()
             ->where('user_id', request()->user()->id)
@@ -28,7 +28,7 @@ class QuestionRepository
      *
      * @return QuestionType
      */
-    public static function storeType(): QuestionType
+    public static function store(): QuestionType
     {
         $question_type = new QuestionType();
         $question_type->user_id = request()->user()->id;
@@ -42,9 +42,8 @@ class QuestionRepository
         $question_type->options = is_array(request()->input('options')) && !empty(array_filter(request()->input('options'))) ? array_filter(request()->input('options')) : null;
 
         $question_type->save();
-        $question_type->refresh();
 
-        return $question_type;
+        return $question_type->fresh();
     }
 
     /**
@@ -53,7 +52,7 @@ class QuestionRepository
      * @param QuestionType $question_type
      * @return QuestionType
      */
-    public static function updateType(QuestionType $question_type): QuestionType
+    public static function update(QuestionType $question_type): QuestionType
     {
         if ($question_type->user_id === null || request()->user()->id !== $question_type->user_id) {
             throw new UnprocessableEntityHttpException();
@@ -67,9 +66,8 @@ class QuestionRepository
         $question_type->options = is_array(request()->input('options')) && !empty(array_filter(request()->input('options'))) ? array_filter(request()->input('options')) : null;
 
         $question_type->save();
-        $question_type->refresh();
 
-        return $question_type;
+        return $question_type->fresh();
     }
 
     /**
@@ -78,7 +76,7 @@ class QuestionRepository
      * @param QuestionType $question_type
      * @return boolean
      */
-    public static function deleteType(QuestionType $question_type): bool
+    public static function delete(QuestionType $question_type): bool
     {
         Question::where('question_type_id', $question_type->id)
             ->update([
