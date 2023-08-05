@@ -72,7 +72,7 @@ class TemplateRepository
         foreach ($questions as $item) {
             $item['template_id'] = $template->id;
             if (isset($item['id'])) {
-                QuestionRepository::update(Question::find($item['id']));
+                QuestionRepository::update(Question::find($item['id']), $item);
             } else {
                 QuestionRepository::store($item);
             }
