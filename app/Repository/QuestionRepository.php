@@ -100,7 +100,7 @@ class QuestionRepository
         }
 
         if (
-            in_array(QuestionType::COMPONENTS_HAS_VALUES, $data['component'])
+            in_array($data['component'], QuestionType::COMPONENTS_HAS_VALUES)
             && (!isset($data['values']) || empty(array_filter($data['values'])))
         ) {
             return true;
