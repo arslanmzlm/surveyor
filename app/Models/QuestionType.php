@@ -58,11 +58,13 @@ class QuestionType extends Model
 
     const COMPONENT_DESCRIPTION = "OutputDescription";
     const COMPONENT_IMAGE = "OutputImage";
+    const COMPONENT_LIST = "OutputList";
 
     const COMPONENTS_HAS_VALUES = [
         QuestionType::COMPONENT_RADIO_GROUP,
         QuestionType::COMPONENT_CHECKBOX_GROUP,
         QuestionType::COMPONENT_MULTIPLE_RADIO_GROUP,
+        QuestionType::COMPONENT_LIST,
     ];
 
     /**

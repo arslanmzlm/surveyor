@@ -13,14 +13,14 @@ class QuestionRepository
      * Store question data.
      *
      * @param array|null $data
-     * @return false|Question
+     * @return Question|null
      */
     public static function store(array $data = null): ?Question
     {
         $data = $data === null ? self::getDataFromRequest() : $data;
 
         if (self::validateQuestionData($data)) {
-            return false;
+            return null;
         }
 
         $data = self::mutateRequest($data);
@@ -49,14 +49,14 @@ class QuestionRepository
      *
      * @param Question $question
      * @param array|null $data
-     * @return false|Question
+     * @return Question|null
      */
     public static function update(Question $question, array $data = null): ?Question
     {
         $data = $data === null ? self::getDataFromRequest() : $data;
 
         if (self::validateQuestionData($data)) {
-            return false;
+            return null;
         }
 
         $data = self::mutateRequest($data);
@@ -77,6 +77,12 @@ class QuestionRepository
         return $question;
     }
 
+    /**
+     * Validate data of the question.
+     *
+     * @param array $data
+     * @return bool
+     */
     private static function validateQuestionData(array $data): bool
     {
         if (
@@ -213,6 +219,9 @@ class QuestionRepository
         }
     }
 
+    /**
+     * @return array
+     */
     private static function getDataFromRequest(): array
     {
         return [
