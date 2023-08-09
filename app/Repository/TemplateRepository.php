@@ -87,10 +87,7 @@ class TemplateRepository
      */
     private static function deleteQuestions(Template $template): void
     {
-        $questions = collect(request()->input('questions'));
-
-        if ($questions) {
-            $template->questions()->whereNotIn('id', $questions->pluck('id'))->delete();
-        }
+        $ids = collect(request()->input('questions'))->whereNotNull('id')->pluck('id');
+        $template->questions()->whereNotIn('id', $ids)->delete();
     }
 }
