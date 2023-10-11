@@ -3,129 +3,107 @@
 namespace App\Repository;
 
 use App\Models\Group;
-use App\Models\Patient;
-use App\Models\Survey;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 
 class GroupRepository
 {
-    /**
-     * Update group data with patients.
-     *
-     * @param \App\Models\Group $group
-     * @return \App\Models\Group
-     */
-    public static function updatePatients(Group $group): \App\Models\Group
+    public static function store(?array $data = null): Group
     {
-        $group->name = request()->input('name');
-        $group->size = request()->input('size');
+        $data = $data === null ? self::getDataFromRequest() : $data;
+
+        $group = new Group();
+        $group->workspace_id = $data['workspace_id'];
+
+        return self::assignAttributes($group, $data);
+    }
+
+    public static function update(Group $group, ?array $data = null): Group
+    {
+        $data = $data === null ? self::getDataFromRequest() : $data;
+
+        return self::assignAttributes($group, $data);
+    }
+
+    private static function getDataFromRequest(): array
+    {
+        return [
+            'name' => request()->input('name'),
+            'size' => request()->input('size'),
+            'logo' => request()->input('logo'),
+            'patients' => request()->input('patients'),
+            'surveys' => request()->input('surveys'),
+        ];
+    }
+
+    private static function storeLogo(Group $group, array $data): void
+    {
+        if (isset($data['logo']) && $data['logo'] instanceof UploadedFile) {
+            $file = $data['logo'];
+            $fileName = Str::slug($group->name) . '-' . rand(10000, 99999) . '.' . $file->extension();
+            $file->storeAs('/public/images/groups/logos', $fileName);
+            $group->logo = $fileName;
+        }
+    }
+
+    private static function assignAttributes(Group $group, array $data): Group
+    {
+        $group->name = $data['name'];
+        $group->size = (int)$data['size'];
+        self::storeLogo($group, $data);
+
         $group->save();
 
-        self::deletePatients($group);
+        if (is_array($data['patients'])) {
+            $patients = collect($data['patients']);
+            $patients->transform(function ($item) use ($group) {
+                $item['group_id'] = $group->id;
+                return $item;
+            });
 
-        self::storePatients($group);
-
-        return $group;
-    }
-
-    /**
-     * Delete patients that are no longer used.
-     *
-     * @param \App\Models\Group $group
-     * @return mixed
-     */
-    public static function deletePatients(Group $group)
-    {
-        $patients = collect(request()->input('patients'));
-
-        if ($patients) {
-            return $group->patients()->whereNotIn('id', $patients->pluck('id'))->delete();
+            self::deleteOldPatients($group, $patients);
+            PatientRepository::storeOrUpdateMany($patients);
         }
 
-        return true;
+        if (is_array($data['surveys'])) {
+            $surveys = collect($data['surveys']);
+            $surveys->transform(function ($item) use ($group) {
+                $item['group_id'] = $group->id;
+                return $item;
+            });
+
+            self::deleteOldSurveys($group, $surveys);
+            SurveyRepository::storeOrUpdateMany($surveys);
+        }
+
+        return $group->fresh();
     }
 
-    /**
-     * Store patient data.
-     *
-     * @param \App\Models\Group $group
-     * @return void
-     */
-    public static function storePatients(Group $group): void
+    public static function storeOrUpdateMany(Collection $groups): void
     {
-        $patients = request()->input('patients');
-
-        foreach ($patients as $item) {
-            if (!empty($item['phone']) && strlen($item['phone']) == 10) {
-                /**
-                 * @var Patient $patient
-                 */
-                $patient = Patient::findOrNew($item['id'] ?? null);
-                $patient->group_id = $group->id;
-                $patient->name = !empty($item['name']) ? $item['name'] : null;
-                $patient->phone = $item['phone'];
-                $patient->contact_phone = !empty($item['contact_phone']) ? $item['contact_phone'] : null;
-                $patient->save();
+        foreach ($groups as $item) {
+            if (isset($item['id'])) {
+                self::update(Group::find($item['id']), $item);
+            } else {
+                self::store($item);
             }
         }
     }
 
-    /**
-     * Update group data with surveys.
-     *
-     * @param \App\Models\Group $group
-     * @return \App\Models\Group
-     */
-    public static function updateSurveys(Group $group): \App\Models\Group
+    public static function deleteOldPatients(Group $group, Collection $patients): void
     {
-        $group->name = request()->input('name');
-        $group->save();
-
-        self::deleteSurveys($group);
-
-        self::storeSurveys($group);
-
-        return $group;
-    }
-
-    /**
-     * Delete surveys that are no longer used.
-     *
-     * @param \App\Models\Group $group
-     * @return mixed
-     */
-    public static function deleteSurveys(Group $group)
-    {
-        $surveys = collect(request()->input('surveys'));
-
-        if ($surveys) {
-            return $group->surveys()->whereNotIn('id', $surveys->pluck('id'))->delete();
+        if ($group->patients()->exists()) {
+            $ids = $patients->whereNotNull('id')->pluck('id');
+            $group->patients()->whereNotIn('id', $ids)->delete();
         }
-
-        return true;
     }
 
-    /**
-     * Store survey data.
-     *
-     * @param \App\Models\Group $group
-     * @return void
-     */
-    public static function storeSurveys(Group $group): void
+    public static function deleteOldSurveys(Group $group, Collection $surveys): void
     {
-        $surveys = request()->input('surveys');
-
-        foreach ($surveys as $item) {
-            if (!empty($item['template_id']) && !empty($item['survey_at'])) {
-                /**
-                 * @var Survey $survey
-                 */
-                $survey = Survey::findOrNew($item['id'] ?? null);
-                $survey->group_id = $group->id;
-                $survey->name = !empty($item['name']) ? $item['name'] : null;
-                $survey->template_id = $item['template_id'];
-                $survey->survey_at = $item['survey_at'];
-                $survey->save();
-            }
+        if ($group->surveys()->exists()) {
+            $ids = $surveys->whereNotNull('id')->pluck('id');
+            $group->surveys()->whereNotIn('id', $ids)->delete();
         }
     }
 }

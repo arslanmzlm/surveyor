@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Helpers\Mutators;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreUserRequest extends FormRequest
@@ -20,7 +19,7 @@ class StoreUserRequest extends FormRequest
             "username" => ["required", "unique:users"],
             "password" => ["required"],
             "email" => ["required", "email", "unique:users"],
-            "phone" => ["required"],
+            "phone" => ["required", "min:10"],
             "hospital_id" => ["nullable", "exists:hospitals,id"],
             "clinic_id" => ["nullable", "exists:clinics,id"],
         ];

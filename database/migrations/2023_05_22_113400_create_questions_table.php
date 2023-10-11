@@ -37,6 +37,12 @@ class CreateQuestionsTable extends Migration
             $table->smallInteger('score')
                 ->nullable()
                 ->default(null);
+            $table->foreignId('related_to')
+                ->nullable()
+                ->default(null)
+                ->constrained('questions')
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
             $table->json('values')
                 ->nullable()
                 ->default(null);

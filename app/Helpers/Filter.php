@@ -3,7 +3,6 @@
 namespace App\Helpers;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class Filter
@@ -65,8 +64,8 @@ class Filter
     {
         $this->model = new $model;
         $this->per_page = (int)request()->query('limit', $per_page);
-        $this->sort = Str::lower(request()->query('sort', 'id'));
-        $this->sort_type = Str::lower(request()->query('sort_type', 'desc'));
+        $this->sort = Str::snake(request()->query('sort', 'id'));
+        $this->sort_type = Str::snake(request()->query('sort_type', 'desc'));
     }
 
     /**

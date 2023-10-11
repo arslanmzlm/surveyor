@@ -2,100 +2,61 @@
 
 namespace App\Repository;
 
-use App\Models\Group;
 use App\Models\Workspace;
-use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 class WorkspaceRepository
 {
-    /**
-     * Store workspace data.
-     *
-     * @return \App\Models\Workspace
-     */
-    public static function store(): \App\Models\Workspace
+    public static function store(): Workspace
     {
         $workspace = new Workspace();
         $workspace->user_id = request()->user()->id;
+
+        return self::assignAttributes($workspace);
+    }
+
+    public static function update(Workspace $workspace): Workspace
+    {
+        return self::assignAttributes($workspace);
+    }
+
+    private static function assignAttributes(Workspace $workspace): Workspace
+    {
         $workspace->name = request()->input('name');
-        if ($file = request()->file('logo')) {
-            $fileName = Str::slug($workspace->name) . '-' . rand(10000, 99999) . '.' . $file->extension();
-            $file->storeAs('/public/images/workspaces/logos', $fileName);
-            $workspace->logo = $fileName;
-        }
+        self::storeLogo($workspace);
+
         $workspace->save();
 
-        self::storeGroups($workspace);
+        if (request()->has('groups')) {
+            $groups = collect(request()->input('groups'));
+            $groups->transform(function ($item) use ($workspace) {
+                $item['workspace_id'] = $workspace->id;
+                return $item;
+            });
+
+            self::deleteGroups($workspace, $groups);
+            GroupRepository::storeOrUpdateMany($groups);
+        }
 
         return $workspace->fresh();
     }
 
-    /**
-     * Update workspace data.
-     *
-     * @param \App\Models\Workspace $workspace
-     * @return \App\Models\Workspace
-     */
-    public static function update(Workspace $workspace): \App\Models\Workspace
+    public static function storeLogo(Workspace $workspace): void
     {
-        $workspace->name = request()->input('name');
-        if ($file = request()->file('logo')) {
+        if (request()->has('logo')) {
+            $file = request()->file('logo');
             $fileName = Str::slug($workspace->name) . '-' . rand(10000, 99999) . '.' . $file->extension();
             $file->storeAs('/public/images/workspaces/logos', $fileName);
             $workspace->logo = $fileName;
         }
-        $workspace->save();
-
-        self::deleteGroups($workspace);
-
-        self::storeGroups($workspace);
-
-        return $workspace->fresh();
     }
 
-    /**
-     * Delete groups that are no longer used.
-     *
-     * @param \App\Models\Workspace $workspace
-     * @return mixed
-     */
-    public static function deleteGroups(Workspace $workspace)
+    public static function deleteGroups(Workspace $workspace, Collection $groups): void
     {
-        $groups = collect(request()->input('groups'));
-
-        if ($groups) {
-            return $workspace->groups()->whereNotIn('id', $groups->pluck('id'))->delete();
-        }
-
-        return true;
-    }
-
-    /**
-     * Store group data.
-     *
-     * @param \App\Models\Workspace $workspace
-     * @return void
-     */
-    public static function storeGroups(Workspace $workspace): void
-    {
-        $groups = request()->input('groups');
-
-        foreach ($groups as $item) {
-            /**
-             * @var Group $group
-             */
-            $group = Group::findOrNew($item['id'] ?? null);
-            $group->workspace_id = $workspace->id;
-            $group->name = $item['name'];
-            $group->size = (int)$item['size'];
-            if (isset($item['logo']) && $item['logo'] instanceof UploadedFile) {
-                $file = $item['logo'];
-                $fileName = Str::slug($group->name) . '-' . rand(10000, 99999) . '.' . $file->extension();
-                $file->storeAs('/public/images/groups/logos', $fileName);
-                $group->logo = $fileName;
-            }
-            $group->save();
+        if ($workspace->groups()->exists()) {
+            $ids = $groups->whereNotNull('id')->pluck('id');
+            $workspace->groups()->whereNotIn('id', $ids)->delete();
         }
     }
 }

@@ -2,8 +2,8 @@
 
 namespace App\Repository;
 
-use App\Models\Question;
 use App\Models\Template;
+use Illuminate\Support\Collection;
 
 class TemplateRepository
 {
@@ -12,17 +12,12 @@ class TemplateRepository
      *
      * @return \App\Models\Template
      */
-    public static function store(): \App\Models\Template
+    public static function store(): Template
     {
         $template = new Template();
         $template->user_id = request()->user()->id;
-        $template->name = request()->input('name');
-        $template->description = request()->input('description');
-        $template->save();
 
-        self::storeQuestions($template);
-
-        return $template->fresh();
+        return self::assignAttributes($template);
     }
 
     /**
@@ -31,63 +26,37 @@ class TemplateRepository
      * @param \App\Models\Template $template
      * @return \App\Models\Template
      */
-    public static function update(Template $template): \App\Models\Template
+    public static function update(Template $template): Template
+    {
+        return self::assignAttributes($template);
+    }
+
+    private static function assignAttributes(Template $template): Template
     {
         $template->name = request()->input('name');
         $template->description = request()->input('description');
         $template->save();
 
-        self::deleteQuestions($template);
-        self::updateQuestions($template);
+        if (request()->has('questions')) {
+            $questions = collect(request()->input('questions'));
+            $questions->transform(function ($item) use ($template) {
+                $item['template_id'] = $template->id;
+                return $item;
+            });
+
+            self::deleteQuestions($template, $questions);
+            QuestionRepository::storeOrUpdateMany($questions);
+        }
+
 
         return $template->fresh();
     }
 
-    /**
-     * Store question data.
-     *
-     * @param \App\Models\Template $template
-     * @return void
-     */
-    private static function storeQuestions(Template $template): void
+    private static function deleteQuestions(Template $template, Collection $questions): void
     {
-        $questions = request()->input('questions');
-
-        foreach ($questions as $item) {
-            $item['template_id'] = $template->id;
-            QuestionRepository::store($item);
+        if ($template->questions()->exists()) {
+            $ids = $questions->whereNotNull('id')->pluck('id');
+            $template->questions()->whereNotIn('id', $ids)->delete();
         }
-    }
-
-    /**
-     * Store question data.
-     *
-     * @param \App\Models\Template $template
-     * @return void
-     */
-    private static function updateQuestions(Template $template): void
-    {
-        $questions = request()->input('questions');
-
-        foreach ($questions as $item) {
-            $item['template_id'] = $template->id;
-            if (isset($item['id'])) {
-                QuestionRepository::update(Question::find($item['id']), $item);
-            } else {
-                QuestionRepository::store($item);
-            }
-        }
-    }
-
-    /**
-     * Delete questions that are no longer used.
-     *
-     * @param \App\Models\Template $template
-     * @return void
-     */
-    private static function deleteQuestions(Template $template): void
-    {
-        $ids = collect(request()->input('questions'))->whereNotNull('id')->pluck('id');
-        $template->questions()->whereNotIn('id', $ids)->delete();
     }
 }

@@ -34,12 +34,12 @@ class CleanPhone
 
 
     /**
-     * @param $data
-     * @param $key
-     * @param $callback
+     * @param array $data
+     * @param string $key
+     * @param callable $callback
      * @return void
      */
-    private function modifyNestedData(&$data, $key, $callback): void
+    private function modifyNestedData(array &$data, string $key, callable $callback): void
     {
         foreach ($data as $arrayKey => &$value) {
             if (is_array($value)) {

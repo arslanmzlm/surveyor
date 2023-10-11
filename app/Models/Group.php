@@ -80,7 +80,7 @@ class Group extends Model
      *
      * @var array
      */
-    public array $sortable = ['id', 'name', 'size'];
+    public array $sortable = ['id', 'workspace_id', 'name', 'size'];
 
     /**
      * Get the workspace that owns the group.

@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -74,7 +73,7 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $with = ['role'];
+    protected $with = ['role', 'hospital', 'clinic'];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -106,6 +105,7 @@ class User extends Authenticatable
         'username' => 'search',
         'email' => 'search',
         'phone' => 'search',
+        'role_id' => 'related',
         'hospital_id' => 'related',
         'clinic_id' => 'related',
     ];

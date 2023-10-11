@@ -67,6 +67,10 @@ class QuestionType extends Model
         QuestionType::COMPONENT_LIST,
     ];
 
+    const COMPONENTS_HAS_RELATION = [
+        QuestionType::COMPONENT_MULTIPLE_RADIO_GROUP,
+    ];
+
     /**
      * The attributes that aren't mass assignable.
      *

@@ -1,14 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Admin;
 
 use App\Helpers\Filter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
+use App\Repository\UserRepository;
 
 class UserController extends Controller
 {
@@ -21,7 +20,7 @@ class UserController extends Controller
     {
         $users = new Filter(User::class);
 
-        return response($users->with(['hospital', 'clinic'])->get());
+        return response($users->get());
     }
 
     /**
@@ -42,17 +41,7 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request): \Illuminate\Http\Response
     {
-        $user = new User();
-        $user->first_name = $request->input('first_name');
-        $user->surname = $request->input('surname');
-        $user->username = $request->input('username');
-        $user->password = Hash::make($request->input('password'));
-        $user->email = $request->input('email');
-        $user->phone = $request->input('phone');
-        $user->hospital_id = $request->input('hospital_id');
-        $user->clinic_id = $request->input('clinic_id');
-
-        $user->save();
+        $user = UserRepository::store();
 
         return response($user);
     }
@@ -77,19 +66,7 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, User $user): \Illuminate\Http\Response
     {
-        $user->first_name = $request->input('first_name');
-        $user->surname = $request->input('surname');
-        $user->username = $request->input('username');
-        $user->email = $request->input('email');
-        $user->phone = $request->input('phone');
-        $user->hospital_id = $request->input('hospital_id');
-        $user->clinic_id = $request->input('clinic_id');
-
-        if ($request->input('password')) {
-            $user->password = Hash::make($request->input('password'));
-        }
-
-        $user->save();
+        $user = UserRepository::update($user);
 
         return response($user);
     }

@@ -3,7 +3,6 @@
 namespace App\Repository;
 
 use App\Models\Ability;
-use App\Models\Question;
 use App\Models\Role;
 use App\Models\User;
 
@@ -14,17 +13,11 @@ class RoleRepository
      *
      * @return \App\Models\Role
      */
-    public static function storeRole(): \App\Models\Role
+    public static function store(): Role
     {
         $role = new Role();
-        $role->name = request()->input('name');
-        $role->save();
 
-        $role->abilities()->attach(request()->input('abilities'));
-
-        $role->refresh();
-
-        return $role;
+        return self::assignAttirbutes($role);
     }
 
     /**
@@ -33,16 +26,20 @@ class RoleRepository
      * @param \App\Models\Role $role
      * @return \App\Models\Role
      */
-    public static function updateRole(Role $role): \App\Models\Role
+    public static function update(Role $role): Role
+    {
+        return self::assignAttirbutes($role);
+    }
+
+    private static function assignAttirbutes(Role $role): Role
     {
         $role->name = request()->input('name');
+        $role->is_admin = request()->input('is_admin', false);
         $role->save();
 
         $role->abilities()->sync(request()->input('abilities'));
 
-        $role->refresh();
-
-        return $role;
+        return $role->fresh();
     }
 
     /**

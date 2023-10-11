@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @property int $id
  * @property string $name
+ * @property bool $is_admin
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Ability> $abilities
@@ -21,6 +22,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Role query()
  * @method static \Illuminate\Database\Eloquent\Builder|Role whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Role whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Role whereIsAdmin($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Role whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Role whereUpdatedAt($value)
  * @mixin \Eloquent
@@ -42,6 +44,22 @@ class Role extends Model
      * @var array
      */
     protected $with = ['abilities'];
+
+    /**
+     * The relationship counts that should be eager loaded on every query.
+     *
+     * @var array
+     */
+    protected $withCount = ['users'];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'is_admin' => 'boolean',
+    ];
 
     /**
      * The attributes that are filterable.
