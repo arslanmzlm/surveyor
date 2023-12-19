@@ -53,6 +53,13 @@ class Group extends Model
     protected $with = ['patients', 'surveys'];
 
     /**
+     * The relationship counts that should always be loaded.
+     *
+     * @var array
+     */
+    protected $withCount = ['patients', 'surveys'];
+
+    /**
      * The attributes that should be hidden for serialization.
      *
      * @var array

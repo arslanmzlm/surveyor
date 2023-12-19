@@ -65,7 +65,7 @@ class PatientRepository
     public static function storeOrUpdateMany(Collection $patients): void
     {
         foreach ($patients as $item) {
-            if ($item['id']) {
+            if (isset($item['id'])) {
                 PatientRepository::update(Patient::find($item['id']), $item);
             } else {
                 PatientRepository::store($item);

@@ -17,7 +17,7 @@ class RoleRepository
     {
         $role = new Role();
 
-        return self::assignAttirbutes($role);
+        return self::assignAttributes($role);
     }
 
     /**
@@ -28,10 +28,10 @@ class RoleRepository
      */
     public static function update(Role $role): Role
     {
-        return self::assignAttirbutes($role);
+        return self::assignAttributes($role);
     }
 
-    private static function assignAttirbutes(Role $role): Role
+    private static function assignAttributes(Role $role): Role
     {
         $role->name = request()->input('name');
         $role->is_admin = request()->input('is_admin', false);

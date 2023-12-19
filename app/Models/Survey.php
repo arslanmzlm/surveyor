@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -13,6 +12,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $template_id
  * @property string $name
  * @property \Illuminate\Support\Carbon $survey_at
+ * @property string $state
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Answer> $answers
@@ -26,6 +26,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Survey whereGroupId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Survey whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Survey whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Survey whereState($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Survey whereSurveyAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Survey whereTemplateId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Survey whereUpdatedAt($value)
@@ -33,8 +34,6 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Survey extends Model
 {
-    use HasFactory;
-
     /**
      * The attributes that aren't mass assignable.
      *
@@ -65,7 +64,13 @@ class Survey extends Model
      *
      * @var array
      */
-    public array $sortable = ['id', 'name', 'size'];
+    public array $sortable = ['id', 'name', 'state', 'group_id', 'template_id', 'survey_at'];
+
+    const STATE_CREATED = "created";
+
+    const STATE_SENT = "sent";
+
+    const STATE_COMPLETED = "completed";
 
     /**
      * Get the workspace that owns the group.

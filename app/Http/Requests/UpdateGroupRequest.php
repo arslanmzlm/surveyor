@@ -26,7 +26,7 @@ class UpdateGroupRequest extends FormRequest
             'surveys.*.id' => ['nullable', 'exists:surveys,id'],
             'surveys.*.name' => ['required', 'string'],
             'surveys.*.template_id' => ['required', 'exists:templates,id'],
-            'surveys.*.survey_at' => ['required', 'date', 'after:today'],
+            'surveys.*.survey_at' => ['exclude_unless:surveys.*.id,null', 'required', 'date', 'after:today'],
         ];
     }
 }

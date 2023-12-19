@@ -55,7 +55,9 @@ class GroupRepository
 
         $group->save();
 
-        if (is_array($data['patients'])) {
+        $patients = isset($data['patients']) && is_array($data['patients']) ? array_filter($data['patients']) : null;
+
+        if (!empty($patients)) {
             $patients = collect($data['patients']);
             $patients->transform(function ($item) use ($group) {
                 $item['group_id'] = $group->id;
@@ -66,7 +68,9 @@ class GroupRepository
             PatientRepository::storeOrUpdateMany($patients);
         }
 
-        if (is_array($data['surveys'])) {
+        $surveys = isset($data['surveys']) && is_array($data['surveys']) ? array_filter($data['surveys']) : null;
+
+        if (!empty($surveys)) {
             $surveys = collect($data['surveys']);
             $surveys->transform(function ($item) use ($group) {
                 $item['group_id'] = $group->id;

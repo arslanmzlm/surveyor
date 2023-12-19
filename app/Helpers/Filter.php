@@ -29,6 +29,20 @@ class Filter
     private array $with = [];
 
     /**
+     * Adding only models for response.
+     *
+     * @var array
+     */
+    private array $withOnly = [];
+
+    /**
+     * Adding count of relationships for response.
+     *
+     * @var array
+     */
+    private array $withCount = [];
+
+    /**
      * Sorting column.
      *
      * @var string
@@ -77,6 +91,32 @@ class Filter
     public function with(array $data = []): Filter
     {
         $this->with = $data;
+
+        return $this;
+    }
+
+    /**
+     * Add only typed relationship parameters to query.
+     *
+     * @param array $data
+     * @return $this
+     */
+    public function withOnly(array $data = []): Filter
+    {
+        $this->withOnly = $data;
+
+        return $this;
+    }
+
+    /**
+     * Add count of relationships parameters to query.
+     *
+     * @param array $data
+     * @return $this
+     */
+    public function withCount(array $data = []): Filter
+    {
+        $this->withCount = $data;
 
         return $this;
     }
@@ -189,9 +229,7 @@ class Filter
             $type = $filter['type'];
             $value = $filter['value'];
 
-            if ($type === 'related') {
-                $query->where($column, '=', $value);
-            } else if ($type === 'equal') {
+            if (in_array($type, ['related', 'equal'])) {
                 $query->where($column, '=', $value);
             }
         }
@@ -210,6 +248,14 @@ class Filter
 
         if (!empty($this->with)) {
             $query->with($this->with);
+        }
+
+        if (!empty($this->withOnly)) {
+            $query->withOnly($this->withOnly);
+        }
+
+        if (!empty($this->withCount)) {
+            $query->withCount($this->withCount);
         }
 
         return $query;

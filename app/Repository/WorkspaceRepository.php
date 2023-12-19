@@ -28,7 +28,10 @@ class WorkspaceRepository
 
         $workspace->save();
 
-        if (request()->has('groups')) {
+        $groups = request()->input('groups');
+        $groups = is_array($groups) ? array_filter($groups) : null;
+
+        if (!empty($groups)) {
             $groups = collect(request()->input('groups'));
             $groups->transform(function ($item) use ($workspace) {
                 $item['workspace_id'] = $workspace->id;
@@ -45,10 +48,15 @@ class WorkspaceRepository
     public static function storeLogo(Workspace $workspace): void
     {
         if (request()->has('logo')) {
-            $file = request()->file('logo');
-            $fileName = Str::slug($workspace->name) . '-' . rand(10000, 99999) . '.' . $file->extension();
-            $file->storeAs('/public/images/workspaces/logos', $fileName);
-            $workspace->logo = $fileName;
+            if (request()->input('logo') === null && $workspace->logo !== null) {
+                $workspace->logo = null;
+            } else if (request()->file('logo')) {
+                $file = request()->file('logo');
+                $fileName = Str::slug($workspace->name) . '-' . rand(10000, 99999) . '.' . $file->extension();
+                $file->storeAs('/public/images/workspaces/logos', $fileName);
+                $workspace->logo = $fileName;
+            }
+
         }
     }
 

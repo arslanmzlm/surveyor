@@ -37,7 +37,10 @@ class TemplateRepository
         $template->description = request()->input('description');
         $template->save();
 
-        if (request()->has('questions')) {
+        $questions = request()->input('questions');
+        $questions = is_array($questions) ? array_filter($questions) : null;
+
+        if (!empty($questions)) {
             $questions = collect(request()->input('questions'));
             $questions->transform(function ($item) use ($template) {
                 $item['template_id'] = $template->id;
