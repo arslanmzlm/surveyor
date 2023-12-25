@@ -64,4 +64,39 @@ class SurveyRepository
 
         return $survey->fresh();
     }
+
+    /**
+     * @param Survey $survey
+     * @return Survey|null
+     */
+    public static function init(Survey $survey): ?Survey
+    {
+        if (!$survey->questions()->exists() && $survey->state !== Survey::STATE_INITIALIZED) {
+            $related_id = null;
+            foreach ($survey->template->questions as $question) {
+                $newQuestion = $question->replicate();
+                $newQuestion->template_id = null;
+                $newQuestion->survey_id = $survey->id;
+                $newQuestion->created_at = now();
+                $newQuestion->updated_at = now();
+
+                if ($newQuestion->hasRelation() && $newQuestion->related_to !== null) {
+                    $newQuestion->related_to = $related_id;
+                }
+
+                $newQuestion->save();
+
+                if ($newQuestion->hasRelation() && $newQuestion->related_to === null) {
+                    $related_id = $newQuestion->id;
+                }
+            }
+
+            $survey->state = Survey::STATE_INITIALIZED;
+            $survey->save();
+
+            return $survey->fresh();
+        }
+
+        return $survey;
+    }
 }

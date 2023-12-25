@@ -25,9 +25,13 @@ class CreateSurveysTable extends Migration
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
             $table->string('name');
-            $table->date('survey_at');
             $table->string('state')
                 ->default(Survey::STATE_CREATED);
+            $table->date('survey_at');
+            $table->timestamp('initialized_at')
+                ->nullable();
+            $table->timestamp('send_at')
+                ->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

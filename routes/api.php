@@ -114,13 +114,19 @@ Route::middleware(['auth:sanctum', App\Http\Middleware\CheckAbility::class])
         Route::post('/template/update/{template}', [\App\Http\Controllers\Api\App\TemplateController::class, 'update'])->name('app.template.update');
         Route::delete('/template/delete/{template}', [\App\Http\Controllers\Api\App\TemplateController::class, 'destroy'])->name('app.template.destroy');
 
-        // Patient
+        // Survey
         Route::get('/surveys', [\App\Http\Controllers\Api\App\SurveyController::class, 'index'])->name('app.survey.list');
-        Route::get('/survey/all', [\App\Http\Controllers\Api\App\SurveyController::class, 'all'])->name('app.survey.all');
-        Route::post('/survey/store', [\App\Http\Controllers\Api\App\SurveyController::class, 'store'])->name('app.survey.store');
-        Route::get('/survey/{survey}', [\App\Http\Controllers\Api\App\SurveyController::class, 'show'])->name('app.survey.show');
-        Route::post('/survey/update/{survey}', [\App\Http\Controllers\Api\App\SurveyController::class, 'update'])->name('app.survey.update');
+        Route::get('/survey/{survey}/patients', [\App\Http\Controllers\Api\App\SurveyController::class, 'patients'])->name('app.survey.patients');
         Route::delete('/survey/delete/{survey}', [\App\Http\Controllers\Api\App\SurveyController::class, 'destroy'])->name('app.survey.destroy');
+
+        // Survey Item
+        Route::get('/survey-items', [\App\Http\Controllers\Api\App\SurveyItemController::class, 'index'])->name('app.survey.item.list');
+        Route::get('/survey-items/all', [\App\Http\Controllers\Api\App\SurveyItemController::class, 'all'])->name('app.survey.item.all');
+        Route::post('/survey-item/store', [\App\Http\Controllers\Api\App\SurveyItemController::class, 'store'])->name('app.survey.item.store');
+        Route::get('/survey-item/{survey_item}', [\App\Http\Controllers\Api\App\SurveyItemController::class, 'show'])->name('app.survey.item.show');
+        Route::get('/survey-item/find/{survey}/{patient}', [\App\Http\Controllers\Api\App\SurveyItemController::class, 'find'])->name('app.survey.item.find');
+        Route::post('/survey-item/update/{survey_item}', [\App\Http\Controllers\Api\App\SurveyItemController::class, 'update'])->name('app.survey.item.update');
+        Route::delete('/survey-item/delete/{survey_item}', [\App\Http\Controllers\Api\App\SurveyItemController::class, 'destroy'])->name('app.survey.item.destroy');
     });
 
 Route::post('/login', [\App\Http\Controllers\Api\AuthController::class, 'authenticate']);

@@ -32,7 +32,7 @@ class UserRepository
 
     private static function assignAttributes(User $user): User
     {
-        $user->first_name = request()->input('first_name');
+        $user->name = request()->input('name');
         $user->surname = request()->input('surname');
         $user->username = request()->input('username');
         $user->email = request()->input('email');

@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -29,8 +28,6 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Hospital extends Model
 {
-    use HasFactory;
-
     /**
      * The attributes that aren't mass assignable.
      *
