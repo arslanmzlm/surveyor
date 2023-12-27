@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -13,12 +12,11 @@ use Laravel\Sanctum\HasApiTokens;
  * App\Models\User
  *
  * @property int $id
- * @property string $first_name
+ * @property string $name
  * @property string $surname
  * @property string $username
  * @property string $email
  * @property string $phone
- * @property \Illuminate\Support\Carbon|null $email_verified_at
  * @property string $password
  * @property int|null $role_id
  * @property int|null $hospital_id
@@ -43,10 +41,9 @@ use Laravel\Sanctum\HasApiTokens;
  * @method static \Illuminate\Database\Eloquent\Builder|User whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereEmail($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereEmailVerifiedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereFirstName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereHospitalId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User wherePassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User wherePhone($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereRememberToken($value)
@@ -74,7 +71,7 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $with = ['role'];
+    protected $with = ['role', 'hospital', 'clinic'];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -101,11 +98,12 @@ class User extends Authenticatable
      * @var array
      */
     public array $filterable = [
-        'first_name' => 'search',
+        'name' => 'search',
         'surname' => 'search',
         'username' => 'search',
         'email' => 'search',
         'phone' => 'search',
+        'role_id' => 'related',
         'hospital_id' => 'related',
         'clinic_id' => 'related',
     ];
@@ -115,7 +113,7 @@ class User extends Authenticatable
      *
      * @var array
      */
-    public array $sortable = ['id', 'first_name', 'username'];
+    public array $sortable = ['id', 'name', 'username'];
 
     /**
      * Get the hospital the user is belonged to.

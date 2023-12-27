@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -36,8 +35,6 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Group extends Model
 {
-    use HasFactory;
-
     /**
      * The attributes that aren't mass assignable.
      *
@@ -51,6 +48,13 @@ class Group extends Model
      * @var array
      */
     protected $with = ['patients', 'surveys'];
+
+    /**
+     * The relationship counts that should always be loaded.
+     *
+     * @var array
+     */
+    protected $withCount = ['patients', 'surveys'];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -80,7 +84,7 @@ class Group extends Model
      *
      * @var array
      */
-    public array $sortable = ['id', 'name', 'size'];
+    public array $sortable = ['id', 'workspace_id', 'name', 'size'];
 
     /**
      * Get the workspace that owns the group.

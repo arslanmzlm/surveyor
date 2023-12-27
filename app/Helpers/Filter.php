@@ -3,7 +3,6 @@
 namespace App\Helpers;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class Filter
@@ -28,6 +27,20 @@ class Filter
      * @var array
      */
     private array $with = [];
+
+    /**
+     * Adding only models for response.
+     *
+     * @var array
+     */
+    private array $withOnly = [];
+
+    /**
+     * Adding count of relationships for response.
+     *
+     * @var array
+     */
+    private array $withCount = [];
 
     /**
      * Sorting column.
@@ -65,8 +78,8 @@ class Filter
     {
         $this->model = new $model;
         $this->per_page = (int)request()->query('limit', $per_page);
-        $this->sort = Str::lower(request()->query('sort', 'id'));
-        $this->sort_type = Str::lower(request()->query('sort_type', 'desc'));
+        $this->sort = Str::snake(request()->query('sort', 'id'));
+        $this->sort_type = Str::snake(request()->query('sort_type', 'desc'));
     }
 
     /**
@@ -78,6 +91,32 @@ class Filter
     public function with(array $data = []): Filter
     {
         $this->with = $data;
+
+        return $this;
+    }
+
+    /**
+     * Add only typed relationship parameters to query.
+     *
+     * @param array $data
+     * @return $this
+     */
+    public function withOnly(array $data = []): Filter
+    {
+        $this->withOnly = $data;
+
+        return $this;
+    }
+
+    /**
+     * Add count of relationships parameters to query.
+     *
+     * @param array $data
+     * @return $this
+     */
+    public function withCount(array $data = []): Filter
+    {
+        $this->withCount = $data;
 
         return $this;
     }
@@ -190,9 +229,7 @@ class Filter
             $type = $filter['type'];
             $value = $filter['value'];
 
-            if ($type === 'related') {
-                $query->where($column, '=', $value);
-            } else if ($type === 'equal') {
+            if (in_array($type, ['related', 'equal'])) {
                 $query->where($column, '=', $value);
             }
         }
@@ -211,6 +248,14 @@ class Filter
 
         if (!empty($this->with)) {
             $query->with($this->with);
+        }
+
+        if (!empty($this->withOnly)) {
+            $query->withOnly($this->withOnly);
+        }
+
+        if (!empty($this->withCount)) {
+            $query->withCount($this->withCount);
         }
 
         return $query;

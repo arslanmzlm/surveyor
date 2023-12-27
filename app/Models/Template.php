@@ -2,14 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
  * App\Models\Template
  *
  * @property int $id
- * @property int $user_id
+ * @property int|null $user_id
  * @property string $name
  * @property string|null $description
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -29,8 +28,6 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Template extends Model
 {
-    use HasFactory;
-
     /**
      * The attributes that aren't mass assignable.
      *
@@ -67,5 +64,15 @@ class Template extends Model
     public function questions(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Question::class)->orderBy('order');
+    }
+
+    public function getInputCount(): int
+    {
+        return $this->questions()->whereRelation('questionType', 'type', '=', QuestionType::COMPONENT_TYPE_INPUT)->count();
+    }
+
+    public function getInputs()
+    {
+        return $this->questions()->whereRelation('questionType', 'type', '=', QuestionType::COMPONENT_TYPE_INPUT)->get();
     }
 }

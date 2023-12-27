@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Helpers\Mutators;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreRoleRequest extends FormRequest
@@ -16,6 +15,7 @@ class StoreRoleRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string'],
+            'is_admin' => ['nullable', 'boolean'],
             'abilities' => ['required', 'array'],
             'abilities.*' => ['required', 'exists:abilities,id'],
         ];

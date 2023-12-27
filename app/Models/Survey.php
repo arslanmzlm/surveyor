@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -12,20 +11,30 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $group_id
  * @property int $template_id
  * @property string $name
+ * @property string $state
  * @property \Illuminate\Support\Carbon $survey_at
+ * @property string|null $questions_generated_at
+ * @property \Illuminate\Support\Carbon|null $send_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Answer> $answers
- * @property-read int|null $answers_count
+ * @property string|null $deleted_at
  * @property-read \App\Models\Group $group
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SurveyItem> $items
+ * @property-read int|null $items_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Question> $questions
+ * @property-read int|null $questions_count
  * @property-read \App\Models\Template $template
  * @method static \Illuminate\Database\Eloquent\Builder|Survey newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Survey newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Survey query()
  * @method static \Illuminate\Database\Eloquent\Builder|Survey whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Survey whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Survey whereGroupId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Survey whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Survey whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Survey whereQuestionsGeneratedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Survey whereSendAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Survey whereState($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Survey whereSurveyAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Survey whereTemplateId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Survey whereUpdatedAt($value)
@@ -33,8 +42,6 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Survey extends Model
 {
-    use HasFactory;
-
     /**
      * The attributes that aren't mass assignable.
      *
@@ -49,6 +56,8 @@ class Survey extends Model
      */
     protected $casts = [
         'survey_at' => 'date:Y-m-d',
+        'initialized_at' => 'datetime',
+        'send_at' => 'datetime',
     ];
 
     /**
@@ -65,7 +74,15 @@ class Survey extends Model
      *
      * @var array
      */
-    public array $sortable = ['id', 'name', 'size'];
+    public array $sortable = ['id', 'name', 'state', 'group_id', 'template_id', 'survey_at'];
+
+    const STATE_CREATED = "created";
+
+    const STATE_INITIALIZED = "initialized";
+
+    const STATE_SENT = "sent";
+
+    const STATE_COMPLETED = "completed";
 
     /**
      * Get the workspace that owns the group.
@@ -84,10 +101,31 @@ class Survey extends Model
     }
 
     /**
-     * Get all the answers for the survey.
+     * Get the questions belonged to the survey.
      */
-    public function answers(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function questions(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany(Answer::class);
+        return $this->hasMany(Question::class)->orderBy('order');
+    }
+
+    /**
+     * Get all the items for the survey.
+     */
+    public function items(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(SurveyItem::class);
+    }
+
+    public function getInputCount(): int
+    {
+        return $this->questions()->whereRelation('questionType', 'type', '=', QuestionType::COMPONENT_TYPE_INPUT)->count();
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Collection|Question[]
+     */
+    public function getInputs()
+    {
+        return $this->questions()->whereRelation('questionType', 'type', '=', QuestionType::COMPONENT_TYPE_INPUT)->get();
     }
 }

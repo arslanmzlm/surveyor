@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -43,8 +42,6 @@ use Illuminate\Database\Eloquent\Model;
  */
 class QuestionType extends Model
 {
-    use HasFactory;
-
     const COMPONENT_TYPE_INPUT = "input";
     const COMPONENT_TYPE_OUTPUT = "output";
 
@@ -65,6 +62,10 @@ class QuestionType extends Model
         QuestionType::COMPONENT_CHECKBOX_GROUP,
         QuestionType::COMPONENT_MULTIPLE_RADIO_GROUP,
         QuestionType::COMPONENT_LIST,
+    ];
+
+    const COMPONENTS_HAS_RELATION = [
+        QuestionType::COMPONENT_MULTIPLE_RADIO_GROUP,
     ];
 
     /**

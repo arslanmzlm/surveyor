@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Admin;
 
 use App\Helpers\Filter;
 use App\Http\Controllers\Controller;
@@ -41,7 +41,7 @@ class RoleController extends Controller
      */
     public function store(StoreRoleRequest $request): \Illuminate\Http\Response
     {
-        $role = RoleRepository::storeRole();
+        $role = RoleRepository::store();
 
         return response($role);
     }
@@ -66,7 +66,7 @@ class RoleController extends Controller
      */
     public function update(UpdateRoleRequest $request, Role $role): \Illuminate\Http\Response
     {
-        $role = RoleRepository::updateRole($role);
+        $role = RoleRepository::update($role);
 
         return response($role);
     }

@@ -198,6 +198,7 @@ return [
         'abilities.*' => 'Yetkinlik',
         'logo' => 'Logo',
         'groups.*.logo' => 'Logo',
+        'is_admin' => 'Yetkili kullanıcı',
     ],
 
 ];

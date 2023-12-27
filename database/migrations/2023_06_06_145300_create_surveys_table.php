@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Survey;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -24,8 +25,15 @@ class CreateSurveysTable extends Migration
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
             $table->string('name');
+            $table->string('state')
+                ->default(Survey::STATE_CREATED);
             $table->date('survey_at');
+            $table->timestamp('initialized_at')
+                ->nullable();
+            $table->timestamp('send_at')
+                ->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

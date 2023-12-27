@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
  * App\Models\Question
  *
  * @property int $id
- * @property int $template_id
+ * @property int|null $template_id
+ * @property int|null $survey_id
  * @property int $question_type_id
  * @property string $label
  * @property string|null $description
@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $order
  * @property string|null $value
  * @property int|null $score
+ * @property int|null $related_to
  * @property array|null $values
  * @property array|null $options
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -24,7 +25,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property-read string $component
  * @property-read int|null $main_question_type_id
  * @property-read \App\Models\QuestionType $questionType
- * @property-read \App\Models\Template $template
+ * @property-read \App\Models\Template|null $template
  * @method static \Illuminate\Database\Eloquent\Builder|Question newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Question newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Question query()
@@ -35,8 +36,10 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Question whereOptions($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Question whereOrder($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Question whereQuestionTypeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Question whereRelatedTo($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Question whereRequired($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Question whereScore($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Question whereSurveyId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Question whereTemplateId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Question whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Question whereValue($value)
@@ -45,8 +48,6 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Question extends Model
 {
-    use HasFactory;
-
     /**
      * The attributes that aren't mass assignable.
      *
@@ -93,6 +94,16 @@ class Question extends Model
     }
 
     /**
+     * Get the template the question is belonged to.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function answer(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(Answer::class);
+    }
+
+    /**
      * Get component for question.
      *
      * @return string
@@ -110,5 +121,10 @@ class Question extends Model
     public function getMainQuestionTypeIdAttribute(): ?int
     {
         return $this->questionType->main_question_type_id;
+    }
+
+    public function hasRelation(): bool
+    {
+        return in_array($this->component, QuestionType::COMPONENTS_HAS_RELATION);
     }
 }

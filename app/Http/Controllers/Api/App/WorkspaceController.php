@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\App;
 
 use App\Helpers\Filter;
 use App\Http\Controllers\Controller;
@@ -20,7 +20,7 @@ class WorkspaceController extends Controller
     {
         $workspaces = new Filter(Workspace::class);
 
-        return response($workspaces->userOnly()->get());
+        return response($workspaces->userOnly()->withOnly(['groups'])->get());
     }
 
     /**
@@ -66,7 +66,7 @@ class WorkspaceController extends Controller
      */
     public function update(UpdateWorkspaceRequest $request, Workspace $workspace): \Illuminate\Http\Response
     {
-        WorkspaceRepository::update($workspace);
+        $workspace = WorkspaceRepository::update($workspace);
 
         return response($workspace);
     }

@@ -16,6 +16,12 @@ class CreateQuestionsTable extends Migration
         Schema::create('questions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('template_id')
+                ->nullable()
+                ->constrained()
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
+            $table->foreignId('survey_id')
+                ->nullable()
                 ->constrained()
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
@@ -37,6 +43,12 @@ class CreateQuestionsTable extends Migration
             $table->smallInteger('score')
                 ->nullable()
                 ->default(null);
+            $table->foreignId('related_to')
+                ->nullable()
+                ->default(null)
+                ->constrained('questions')
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
             $table->json('values')
                 ->nullable()
                 ->default(null);

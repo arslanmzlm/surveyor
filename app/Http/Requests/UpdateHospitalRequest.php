@@ -15,8 +15,8 @@ class UpdateHospitalRequest extends FormRequest
     {
         return [
             'name' => ['required'],
-            'city_id' => ['required', 'integer', 'exists:cities,id'],
-            'county_id' => ['required', 'integer', 'exists:counties,id']
+            'city_id' => ['required', 'exists:cities,id'],
+            'county_id' => ['required', 'exists:counties,id']
         ];
     }
 }

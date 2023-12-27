@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Models\Question;
 use App\Models\QuestionType;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 class QuestionRepository
@@ -15,7 +16,7 @@ class QuestionRepository
      * @param array|null $data
      * @return Question|null
      */
-    public static function store(array $data = null): ?Question
+    public static function store(?array $data = null): ?Question
     {
         $data = $data === null ? self::getDataFromRequest() : $data;
 
@@ -23,25 +24,10 @@ class QuestionRepository
             return null;
         }
 
-        $data = self::mutateRequest($data);
-
         $question = new Question();
         $question->template_id = $data['template_id'];
-        $question->question_type_id = $data['main_question_type_id'] ?? $data['question_type_id'];
-        $question->label = $data['label'];
-        $question->description = $data['description'];
-        $question->required = $data['required'];
-        $question->order = $data['order'];
-        $question->value = $data['value'];
-        $question->score = $data['score'];
-        $question->values = $data['values'];
-        $question->options = $data['options'];
 
-        self::storeFiles($question, $data);
-
-        $question->save();
-
-        return $question;
+        return self::assignAttributes($question, $data);
     }
 
     /**
@@ -51,7 +37,7 @@ class QuestionRepository
      * @param array|null $data
      * @return Question|null
      */
-    public static function update(Question $question, array $data = null): ?Question
+    public static function update(Question $question, ?array $data = null): ?Question
     {
         $data = $data === null ? self::getDataFromRequest() : $data;
 
@@ -59,12 +45,38 @@ class QuestionRepository
             return null;
         }
 
+        return self::assignAttributes($question, $data);
+    }
+
+    /**
+     * @return array
+     */
+    private static function getDataFromRequest(): array
+    {
+        return [
+            'template_id' => request()->input('template_id'),
+            'question_type_id' => request()->input('question_type_id'),
+            'label' => request()->input('label'),
+            'description' => request()->input('description'),
+            'required' => request()->input('required'),
+            'order' => request()->input('order'),
+            'value' => request()->input('value'),
+            'score' => request()->input('score'),
+            'values' => request()->input('values'),
+            'options' => request()->input('options'),
+        ];
+    }
+
+    private static function assignAttributes(Question $question, array $data): Question
+    {
         $data = self::mutateRequest($data);
 
+        $question->question_type_id = $data['question_type_id'];
         $question->label = $data['label'];
         $question->description = $data['description'];
         $question->required = $data['required'];
         $question->order = $data['order'];
+        $question->related_to = $data['related_to'];
         $question->value = $data['value'];
         $question->score = $data['score'];
         $question->values = $data['values'];
@@ -74,7 +86,35 @@ class QuestionRepository
 
         $question->save();
 
-        return $question;
+        return $question->fresh();
+    }
+
+    public static function storeOrUpdateMany(Collection $surveys): void
+    {
+        $related = [];
+        $surveys->sortBy('order', SORT_NUMERIC);
+
+        foreach ($surveys as $item) {
+            if (in_array($item['component'], QuestionType::COMPONENTS_HAS_RELATION)) {
+                if (!empty($item['related_order']) && empty($item['related_to'])) {
+                    $item['related_to'] = $related[$item['related_order']]->id;
+                }
+
+                if (!empty($item['related_order']) || !empty($item['related_to'])) {
+                    $item['values'] = $related[$item['related_order']]->values;
+                }
+            }
+
+            if (isset($item['id'])) {
+                $question = self::update(Question::find($item['id']), $item);
+            } else {
+                $question = self::store($item);
+            }
+
+            if (in_array($item['component'], QuestionType::COMPONENTS_HAS_RELATION) && empty($item['related_order']) && empty($item['related_to'])) {
+                $related[$item['order']] = $question;
+            }
+        }
     }
 
     /**
@@ -137,7 +177,7 @@ class QuestionRepository
             $question['options'] = self::mutateOptionsInRequest($question['options']);
         }
 
-        $question['score'] = isset($question['score']) && is_numeric($question['score']) ? (int)$question['score'] : null;
+        $question['score'] = isset($question['score']) && is_numeric($question['score']) ? (float)$question['score'] : null;
         $question['values'] = is_array($question['values']) && !empty(array_filter($question['values'])) ? array_filter($question['values']) : null;
         $question['options'] = is_array($question['options']) && !empty(array_filter($question['options'])) ? array_filter($question['options']) : null;
 
@@ -221,24 +261,5 @@ class QuestionRepository
 
             $question->options = $data['options'];
         }
-    }
-
-    /**
-     * @return array
-     */
-    private static function getDataFromRequest(): array
-    {
-        return [
-            'template_id' => request()->input('template_id'),
-            'question_type_id' => request()->input('main_question_type_id', request()->input('question_type_id')),
-            'label' => request()->input('label'),
-            'description' => request()->input('description'),
-            'required' => request()->input('required'),
-            'order' => request()->input('order'),
-            'value' => request()->input('value'),
-            'score' => request()->input('score'),
-            'values' => request()->input('values'),
-            'options' => request()->input('options'),
-        ];
     }
 }

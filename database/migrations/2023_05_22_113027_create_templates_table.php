@@ -16,6 +16,8 @@ class CreateTemplatesTable extends Migration
         Schema::create('templates', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')
+                ->nullable()
+                ->default(null)
                 ->constrained()
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();

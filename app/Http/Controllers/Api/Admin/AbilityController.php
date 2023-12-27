@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Ability;
@@ -12,9 +12,8 @@ class AbilityController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(): \Illuminate\Http\Response
+    public function all(): \Illuminate\Http\Response
     {
         return response(Ability::orderBy('group')->orderBy('name')->get());
     }
-
 }

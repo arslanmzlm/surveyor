@@ -14,8 +14,8 @@ class UpdateQuestionTypeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'component_name' => ['required', 'string'],
-            'component_description' => ['nullable', 'string'],
+            'label' => ['required', 'string'],
+            'description' => ['nullable', 'string'],
             'required' => ['nullable', 'boolean'],
             'value' => ['nullable'],
             'values' => ['nullable', 'array'],

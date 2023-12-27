@@ -18,6 +18,6 @@ class Mutators
             return preg_replace('/[90|0]*(0[1-9][0-9]{9})/', '$1', $data);
         }
 
-        return $str;
+        return null;
     }
 }

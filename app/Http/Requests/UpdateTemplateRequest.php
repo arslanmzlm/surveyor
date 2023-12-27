@@ -15,7 +15,7 @@ class UpdateTemplateRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'description' => ['required', 'string'],
+            'description' => ['nullable', 'string'],
             'questions' => ['required', 'array'],
             'questions.*.id' => ['nullable', 'exists:questions,id'],
             'questions.*.component' => ['required', 'exists:question_types,component'],

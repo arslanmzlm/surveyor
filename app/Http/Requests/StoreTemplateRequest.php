@@ -15,7 +15,7 @@ class StoreTemplateRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'description' => ['required', 'string'],
+            'description' => ['nullable', 'string'],
             'questions' => ['required', 'array'],
             'questions.*.component' => ['required', 'exists:question_types,component'],
             'questions.*.question_type_id' => ['required', 'exists:question_types,id'],

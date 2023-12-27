@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Helpers\Mutators;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateUserRequest extends FormRequest
@@ -15,12 +14,12 @@ class UpdateUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "first_name" => ["required"],
+            "name" => ["required"],
             "surname" => ["required"],
             "username" => ["required", "unique:users,username,{$this->user->id}"],
             "password" => ["nullable"],
             "email" => ["required", "email", "unique:users,email,{$this->user->id}"],
-            "phone" => ["required"],
+            "phone" => ["required", "min:10"],
             "hospital_id" => ["nullable", "exists:hospitals,id"],
             "clinic_id" => ["nullable", "exists:clinics,id"],
         ];

@@ -14,11 +14,11 @@ class StoreQuestionTypeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'question_type_id' => ['required', 'exists:question_types,id'],
-            'main_question_type_id' => ['nullable', 'exists:question_types,id'],
-            'component' => ['required', 'string'],
-            'component_name' => ['required', 'string'],
-            'component_description' => ['nullable', 'string'],
+            'main_question_type_id' => ['required', 'exists:question_types,id'],
+            'component' => ['required', 'string', 'exists:question_types,component'],
+            'type' => ['required', 'string', 'exists:question_types,type'],
+            'label' => ['required', 'string'],
+            'description' => ['nullable', 'string'],
             'required' => ['nullable', 'boolean'],
             'value' => ['nullable'],
             'values' => ['nullable', 'array'],
