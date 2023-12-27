@@ -1,0 +1,2 @@
+"use strict";(self["webpackChunksurveyor_front"]=self["webpackChunksurveyor_front"]||[]).push([[625],{625:function(r,n,e){e.r(n),e.d(n,{default:function(){return f}});var u=e(3723);function a(r,n,e,a,t,o){return(0,u.wg)(),(0,u.iD)("h1",null,"dashboard")}var t={name:"DashboardPage"},o=e(8380);const s=(0,o.Z)(t,[["render",a]]);var f=s}}]);
+//# sourceMappingURL=625.894af0bc.js.map
